@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stel uw Vraag - Vluchtelingenwerk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices: 
+        - HTML formulier met Tailwind CSS, nu geconfigureerd voor Formspree.
+        - Client-side bevestiging na (gesimuleerde) succesvolle Formspree-inzending.
+        - Pictogrammen en taalwissel functionaliteit behouden.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; 
+        }
+        .form-icon {
+            width: 1.25rem; 
+            height: 1.25rem; 
+            margin-right: 0.5rem; 
+            color: #0369a1; 
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        input:focus, textarea:focus, select:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            border-color: #0284c7; 
+            box-shadow: 0 0 0 2px #38bdf8; 
+        }
+        .language-button {
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .language-button.selected {
+            background-color: #0284c7; 
+            color: white;
+            border-color: #0284c7; 
+        }
+        .confirmation-section {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: #0284c7; /* sky-600 */
+            animation: spin 1s ease infinite;
+            display: none; /* Hidden by default */
+            margin-right: 0.5rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white shadow-xl rounded-lg p-6 md:p-10 w-full max-w-2xl">
+        
+        <div id="form-section">
+            <header class="text-center mb-8">
+                <img src="https://placehold.co/100x100/0284c7/FFFFFF?text=Logo" alt="Logo Vluchtelingenwerk" class="mx-auto mb-4 h-16 w-auto" onerror="this.onerror=null; this.src='https://placehold.co/80x80/E0E0E0/B0B0B0?text=Logo';">
+                <h1 id="main-title" class="text-3xl font-bold text-sky-700">Stel uw Vraag</h1>
+                <p id="subtitle" class="text-slate-600 mt-2">Wij staan klaar om u te helpen. Vul het formulier hieronder in.</p>
+            </header>
+
+            <div class="mb-8 p-4 bg-sky-50 rounded-md border border-sky-200">
+                <label id="lang-select-label" class="block text-sm font-medium text-slate-700 mb-2 flex items-center">
+                    <span class="form-icon">🌍</span> Kies uw taal / Select your language / اختر لغتك
+                </label>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" data-lang="nl" class="language-button selected text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">Nederlands</button>
+                    <button type="button" data-lang="en" class="language-button text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">English</button>
+                    <button type="button" data-lang="ar" class="language-button text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">العربية</button>
+                    <button type="button" data-lang="ti" class="language-button text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">ትግርኛ</button>
+                </div>
+                <p id="lang-select-hint" class="text-xs text-slate-500 mt-2">Selecteer de taal waarin u het formulier wilt invullen en antwoord wilt ontvangen.</p>
+            </div>
+
+            <form id="questionForm" action="https://formspree.io/f/xkgrlbkl" method="POST" class="space-y-6">
+                <div>
+                    <label for="name" id="label-name" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                        <span class="form-icon">👤</span> Uw naam (optioneel)
+                    </label>
+                    <input type="text" name="name" id="name" autocomplete="name"
+                           class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+                           placeholder="Vul hier uw naam in">
+                </div>
+
+                <div>
+                    <label for="email" id="label-email" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                        <span class="form-icon">✉️</span> Uw e-mailadres (voor antwoord)
+                    </label>
+                    <input type="email" name="email" id="email" autocomplete="email" required
+                           class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+                           placeholder="voorbeeld@email.com">
+                </div>
+
+                <div>
+                    <label for="phone" id="label-phone" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                         <span class="form-icon">📞</span> Telefoonnummer (optioneel)
+                    </label>
+                    <input type="tel" name="phone" id="phone" autocomplete="tel"
+                           class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+                           placeholder="+31 6 12345678">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="question_language" id="label-question-lang" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                            <span class="form-icon">🗣️</span> Taal van uw vraag
+                        </label>
+                        <select id="question_language" name="question_language" required
+                                class="mt-1 block w-full px-4 py-2.5 border border-slate-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                            <option value="nl">Nederlands</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                            <option value="ti">ትግርኛ</option>
+                            <option value="fr">Français</option>
+                            <option value="fa">فارسی/دری</option>
+                            <option value="so">Soomaali</option>
+                            <option value="uk">Українська</option>
+                            <option value="other">Anders</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="answer_language" id="label-answer-lang" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                            <span class="form-icon">💬</span> Gewenste taal voor antwoord
+                        </label>
+                        <select id="answer_language" name="answer_language" required
+                                class="mt-1 block w-full px-4 py-2.5 border border-slate-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                            <option value="nl">Nederlands</option>
+                            <option value="en">English</option>
+                            <option value="ar">العربية</option>
+                            <option value="ti">ትግርኛ</option>
+                            <option value="fr">Français</option>
+                            <option value="fa">فارسی/دری</option>
+                            <option value="so">Soomaali</option>
+                            <option value="uk">Українська</option>
+                            <option value="same">Zelfde als vraag</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="question" id="label-question" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                        <span class="form-icon">❓</span> Uw vraag
+                    </label>
+                    <textarea id="question" name="question" rows="6" required
+                              class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+                              placeholder="Typ hier uw vraag zo duidelijk mogelijk..."></textarea>
+                </div>
+                 <input type="hidden" name="_language" id="form_page_language" value="nl">
+
+
+                <div class="pt-2">
+                    <p id="privacy-info" class="text-xs text-slate-500 mb-4">
+                        Door dit formulier in te dienen, gaat u akkoord met ons <a href="#" id="privacy-link-text" class="text-sky-600 hover:underline" onclick="showPrivacyPolicy(event)">privacybeleid</a>. Uw gegevens worden alleen gebruikt om uw vraag te beantwoorden.
+                    </p>
+                    <button type="submit" id="submit-button"
+                            class="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors disabled:opacity-50">
+                        <div class="spinner" id="submit-spinner"></div>
+                        <span id="submit-button-text">Verstuur mijn Vraag</span>
+                        <span id="submit-button-arrow" class="ml-2">➔</span> 
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="confirmation-section" class="confirmation-section text-center">
+            <div class="text-emerald-500 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h2 id="confirmation-title" class="text-2xl font-bold text-slate-800 mb-3">Bedankt voor uw vraag!</h2>
+            <p id="confirmation-message" class="text-slate-600 mb-2">Uw vraag is succesvol verzonden.</p>
+            <p id="confirmation-detail" class="text-slate-600 mb-6">We nemen zo spoedig mogelijk contact met u op via het opgegeven e-mailadres. Controleer ook uw spamfolder.</p>
+            
+            <div class="mt-8 p-4 bg-slate-100 rounded-md">
+                <h3 id="what-next-title" class="text-lg font-semibold text-slate-700 mb-2">Wat nu?</h3>
+                <p id="what-next-faq" class="text-sm text-slate-600 mb-2">Bekijk onze <a href="#" class="text-sky-600 hover:underline" onclick="alert('Link naar FAQ (simulatie)')">Veelgestelde Vragen (FAQ)</a> pagina voor mogelijke antwoorden.</p>
+                <p id="what-next-info" class="text-sm text-slate-600">We streven ernaar binnen [X] werkdagen te antwoorden.</p>
+            </div>
+
+            <button type="button" id="new-question-button"
+                    class="mt-8 w-full md:w-auto px-6 py-3 border border-sky-600 text-sky-600 rounded-md shadow-sm text-base font-medium hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors">
+                Stel nog een vraag
+            </button>
+        </div>
+
+    </div>
+
+    <footer class="text-center mt-8 text-sm text-slate-500">
+        <p id="footer-copy">&copy; <span id="currentYear"></span> Vluchtelingenwerk [Organisatienaam]. Alle rechten voorbehouden.</p>
+         <p id="footer-note" class="text-xs mt-1">Dit is een voorbeeldpagina. Formulierinzendingen worden niet verwerkt tenzij Formspree correct is geconfigureerd.</p>
+    </footer>
+
+    <div id="privacyModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center" style="display: none; z-index: 100;">
+        <div class="relative mx-auto p-5 border w-11/12 md:w-1/2 lg:w-1/3 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 id="modal-title" class="text-lg leading-6 font-medium text-gray-900">Privacybeleid (Voorbeeld)</h3>
+                <div id="modal-content" class="mt-2 px-7 py-3 text-sm text-gray-500 text-left">
+                    <p class="mb-2">Wij, Vluchtelingenwerk [Organisatienaam], hechten veel waarde aan de bescherming van uw persoonsgegevens. In dit privacybeleid willen we heldere en transparante informatie geven over hoe wij omgaan met persoonsgegevens.</p>
+                    <p class="mb-2"><strong>Welke gegevens verzamelen we?</strong> We verzamelen de gegevens die u invult in het contactformulier: uw naam (indien opgegeven), e-mailadres, telefoonnummer (indien opgegeven), de taal van uw vraag, de gewenste taal voor het antwoord, en de inhoud van uw vraag.</p>
+                    <p class="mb-2"><strong>Waarvoor gebruiken we uw gegevens?</strong> Uw gegevens worden uitsluitend gebruikt om contact met u op te nemen en uw vraag te beantwoorden. We delen uw gegevens niet met derden, tenzij dit nodig is om aan een wettelijke verplichting te voldoen.</p>
+                    <p class="mb-2"><strong>Hoe lang bewaren we uw gegevens?</strong> We bewaren uw gegevens niet langer dan strikt nodig is om de doelen te realiseren waarvoor uw gegevens worden verzameld, of zo lang als de wet ons verplicht.</p>
+                    <p>Voor meer informatie kunt u contact met ons opnemen.</p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="closePrivacyModal" class="px-4 py-2 bg-sky-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        Sluiten
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const translations = {
+            nl: {
+                pageTitle: "Stel uw Vraag - Vluchtelingenwerk",
+                mainTitle: "Stel uw Vraag",
+                subtitle: "Wij staan klaar om u te helpen. Vul het formulier hieronder in.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "Selecteer de taal waarin u het formulier wilt invullen en antwoord wilt ontvangen.",
+                labelName: "👤 Uw naam (optioneel)",
+                placeholderName: "Vul hier uw naam in",
+                labelEmail: "✉️ Uw e-mailadres (voor antwoord)",
+                placeholderEmail: "voorbeeld@email.com",
+                labelPhone: "📞 Telefoonnummer (optioneel)",
+                placeholderPhone: "+31 6 12345678",
+                labelQuestionLang: "🗣️ Taal van uw vraag",
+                labelAnswerLang: "💬 Gewenste taal voor antwoord",
+                labelQuestion: "❓ Uw vraag",
+                placeholderQuestion: "Typ hier uw vraag zo duidelijk mogelijk...",
+                privacyInfo: "Door dit formulier in te dienen, gaat u akkoord met ons ",
+                privacyLinkText: "privacybeleid",
+                privacyInfoCont: ". Uw gegevens worden alleen gebruikt om uw vraag te beantwoorden.",
+                submitButtonText: "Verstuur mijn Vraag",
+                footerCopy: `&copy; ${new Date().getFullYear()} Vluchtelingenwerk [Organisatienaam]. Alle rechten voorbehouden.`,
+                footerNote: "Dit is een voorbeeldpagina. Formulierinzendingen worden niet verwerkt tenzij Formspree correct is geconfigureerd.",
+                modalTitle: "Privacybeleid (Voorbeeld)",
+                modalCloseButton: "Sluiten",
+                alertError: "Vul alstublieft uw e-mailadres en vraag in.",
+                confirmationTitle: "Bedankt voor uw vraag!",
+                confirmationMessage: "Uw vraag is succesvol verzonden.",
+                confirmationDetail: "We nemen zo spoedig mogelijk contact met u op via het opgegeven e-mailadres. Controleer ook uw spamfolder.",
+                whatNextTitle: "Wat nu?",
+                whatNextFaq: "Bekijk onze Veelgestelde Vragen (FAQ) pagina voor mogelijke antwoorden.",
+                whatNextInfo: "We streven ernaar binnen [X] werkdagen te antwoorden.",
+                newQuestionButton: "Stel nog een vraag",
+                submittingText: "Bezig met verzenden..."
+            },
+            en: {
+                pageTitle: "Ask your Question - Refugee Support",
+                mainTitle: "Ask your Question",
+                subtitle: "We are ready to help you. Please fill in the form below.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك", 
+                langSelectHint: "Select the language in which you want to fill out the form and receive a reply.",
+                labelName: "👤 Your name (optional)",
+                placeholderName: "Enter your name here",
+                labelEmail: "✉️ Your email address (for reply)",
+                placeholderEmail: "example@email.com",
+                labelPhone: "📞 Phone number (optional)",
+                placeholderPhone: "+31 6 12345678",
+                labelQuestionLang: "🗣️ Language of your question",
+                labelAnswerLang: "💬 Preferred language for reply",
+                labelQuestion: "❓ Your question",
+                placeholderQuestion: "Type your question here as clearly as possible...",
+                privacyInfo: "By submitting this form, you agree to our ",
+                privacyLinkText: "privacy policy",
+                privacyInfoCont: ". Your data will only be used to answer your question.",
+                submitButtonText: "Send my Question",
+                footerCopy: `&copy; ${new Date().getFullYear()} Refugee Support [Organization Name]. All rights reserved.`,
+                footerNote: "This is an example page. Form submissions are not processed unless Formspree is configured correctly.",
+                modalTitle: "Privacy Policy (Example)",
+                modalCloseButton: "Close",
+                alertError: "Please fill in your email address and question.",
+                confirmationTitle: "Thank you for your question!",
+                confirmationMessage: "Your question has been sent successfully.",
+                confirmationDetail: "We will contact you as soon as possible via the email address provided. Please also check your spam folder.",
+                whatNextTitle: "What next?",
+                whatNextFaq: "Check our Frequently Asked Questions (FAQ) page for possible answers.",
+                whatNextInfo: "We aim to reply within [X] working days.",
+                newQuestionButton: "Ask another question",
+                submittingText: "Submitting..."
+            },
+            ar: {
+                pageTitle: "اطرح سؤالك - دعم اللاجئين",
+                mainTitle: "اطرح سؤالك",
+                subtitle: "نحن مستعدون لمساعدتك. يرجى ملء النموذج أدناه.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك", 
+                langSelectHint: "اختر اللغة التي تريد بها ملء النموذج واستلام الرد.",
+                labelName: "👤 اسمك (اختياري)",
+                placeholderName: "أدخل اسمك هنا",
+                labelEmail: "✉️ عنوان بريدك الإلكتروني (للرد)",
+                placeholderEmail: "example@email.com",
+                labelPhone: "📞 رقم الهاتف (اختياري)",
+                placeholderPhone: "+31 6 12345678",
+                labelQuestionLang: "🗣️ لغة سؤالك",
+                labelAnswerLang: "💬 اللغة المفضلة للرد",
+                labelQuestion: "❓ سؤالك",
+                placeholderQuestion: "اكتب سؤالك هنا بوضوح قدر الإمكان...",
+                privacyInfo: "بإرسال هذا النموذج، فإنك توافق على ",
+                privacyLinkText: "سياسة الخصوصية",
+                privacyInfoCont: " الخاصة بنا. سيتم استخدام بياناتك فقط للرد على سؤالك.",
+                submitButtonText: "أرسل سؤالي",
+                footerCopy: `&copy; ${new Date().getFullYear()} دعم اللاجئين [اسم المنظمة]. كل الحقوق محفوظة.`,
+                footerNote: "هذه صفحة مثال. لا تتم معالجة إرسالات النماذج ما لم يتم تكوين Formspree بشكل صحيح.",
+                modalTitle: "سياسة الخصوصية (مثال)",
+                modalCloseButton: "إغلاق",
+                alertError: "يرجى ملء عنوان بريدك الإلكتروني وسؤالك.",
+                confirmationTitle: "شكرا لسؤالك!",
+                confirmationMessage: "تم إرسال سؤالك بنجاح.",
+                confirmationDetail: "سوف نتصل بك في أقرب وقت ممكن عبر عنوان البريد الإلكتر الإلكتروني المقدم. يرجى التحقق أيضا من مجلد الرسائل غير المرغوب فيها.",
+                whatNextTitle: "ماذا بعد؟",
+                whatNextFaq: "راجع صفحة الأسئلة الشائعة (FAQ) للحصول على إجابات محتملة.",
+                whatNextInfo: "نهدف إلى الرد في غضون [X] أيام عمل.",
+                newQuestionButton: "اطرح سؤالاً آخر",
+                submittingText: "جارٍ الإرسال..."
+            },
+            ti: { 
+                pageTitle: "ሕቶኻ ሕተት - ደገፍ ስደተኛታት",
+                mainTitle: "ሕቶኻ ሕተት",
+                subtitle: "ክንሕግዘኩም ድልዋት ኢና። ነዚ ታሕቲ ዘሎ ቅጥዒ ብኽብረትኩም ምልእዎ።",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "ነቲ ቅጥዒ ክትመልእሉን መልሲ ክትቅበሉሉን እትደልይዎ ቋንቋ ምረጹ።",
+                labelName: "👤 ስምኩም (ዘይግድነት)",
+                placeholderName: "ኣብዚ ስምኩም የእትዉ",
+                labelEmail: "✉️ ኢሜይል ኣድራሻኹም (ንመልሲ)",
+                placeholderEmail: "example@email.com",
+                labelPhone: "📞 ቁጽሪ ተሌፎን (ዘይግድነት)",
+                placeholderPhone: "+31 6 12345678",
+                labelQuestionLang: "🗣️ ቋንቋ ሕቶኹም",
+                labelAnswerLang: "💬 ንመልሲ እትመርጽዎ ቋንቋ",
+                labelQuestion: "❓ ሕቶኹም",
+                placeholderQuestion: "ሕቶኹም ብንጹር ኣብዚ ጸሓፉ...",
+                privacyInfo: "ነዚ ቅጥዒ ብምቕራብኩም፡ ን ናትና ",
+                privacyLinkText: "መምርሒ ብሕታዊነት",
+                privacyInfoCont: " ትሰማምዑ ኣለኹም። տվյալները կօգտագործվեն միայն ձեր հարցին պատասխանելու համար.",
+                submitButtonText: "ሕቶይ ስደድ",
+                footerCopy: `&copy; ${new Date().getFullYear()} ደገፍ ስደተኛታት [ሽም ማሕበር]። ኩሉ መሰላት ዝተሓለወ እዩ።`,
+                footerNote: "እዚኣ ገጽ ኣብነት እያ። ቅጥዒ ምቕራባት ኣይሰርሕን እዩ፡ Formspree ብትኽክል እንተዘይተዋቐረ።",
+                modalTitle: "መምርሒ ብሕታዊነት (ኣብነት)",
+                modalCloseButton: "ዕጾ",
+                alertError: "በጃኹም ኢሜይል ኣድራሻኹምን ሕቶኹምን ምልኡ።",
+                confirmationTitle: "ንሕቶኹም የቀንየልና!",
+                confirmationMessage: "ሕቶኹም ብዓወት ተላኢኹ ኣሎ።",
+                confirmationDetail: "ብዝተኻእለና መጠን ቀልጢፍና በቲ ዝሃብኩምና ኢሜይል ኣድራሻ ክንረኽበኩም። በጃኹም፡ ነቲ ናይ ስፓም ፎልደርኩም እውን መርምርዎ።",
+                whatNextTitle: "እንታይ ቀጺሉ?",
+                whatNextFaq: "ንዝኾኑ መልስታት፡ ነቲ ናይ ብዙሕ ጊዜ ዝሕተቱ ሕቶታት (FAQ) ገጽና መርምርዎ።",
+                whatNextInfo: "ኣብ ውሽጢ [X] ናይ ስራሕ መዓልታት ክንምልሰልኩም ንጽዕር ኢና።",
+                newQuestionButton: "ካልእ ሕቶ ሕተት",
+                submittingText: "ይስደድ ኣሎ..."
+            }
+        };
+
+        function changeLanguage(lang) {
+            if (!translations[lang]) {
+                console.warn(`Translations for language "${lang}" not found.`);
+                return;
+            }
+            const t = translations[lang];
+            
+            document.title = t.pageTitle;
+            document.getElementById('main-title').textContent = t.mainTitle;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('lang-select-hint').textContent = t.langSelectHint;
+            
+            document.getElementById('label-name').innerHTML = `<span class="form-icon">👤</span> ${t.labelName.substring(t.labelName.indexOf(' ') + 1)}`; 
+            document.getElementById('name').placeholder = t.placeholderName;
+            
+            document.getElementById('label-email').innerHTML = `<span class="form-icon">✉️</span> ${t.labelEmail.substring(t.labelEmail.indexOf(' ') + 1)}`;
+            document.getElementById('email').placeholder = t.placeholderEmail;
+
+            document.getElementById('label-phone').innerHTML = `<span class="form-icon">📞</span> ${t.labelPhone.substring(t.labelPhone.indexOf(' ') + 1)}`;
+            document.getElementById('phone').placeholder = t.placeholderPhone;
+
+            document.getElementById('label-question-lang').innerHTML = `<span class="form-icon">🗣️</span> ${t.labelQuestionLang.substring(t.labelQuestionLang.indexOf(' ') + 1)}`;
+            document.getElementById('label-answer-lang').innerHTML = `<span class="form-icon">💬</span> ${t.labelAnswerLang.substring(t.labelAnswerLang.indexOf(' ') + 1)}`;
+            
+            document.getElementById('label-question').innerHTML = `<span class="form-icon">❓</span> ${t.labelQuestion.substring(t.labelQuestion.indexOf(' ') + 1)}`;
+            document.getElementById('question').placeholder = t.placeholderQuestion;
+
+            const privacyLink = document.getElementById('privacy-link-text');
+            const privacyInfoP = document.getElementById('privacy-info');
+            privacyLink.textContent = t.privacyLinkText;
+            privacyInfoP.innerHTML = `${t.privacyInfo}<a href="#" id="privacy-link-text" class="text-sky-600 hover:underline" onclick="showPrivacyPolicy(event)">${t.privacyLinkText}</a>${t.privacyInfoCont}`;
+
+            document.getElementById('submit-button-text').textContent = t.submitButtonText;
+            
+            document.getElementById('footer-copy').innerHTML = t.footerCopy;
+            document.getElementById('footer-note').textContent = t.footerNote;
+
+            document.getElementById('modal-title').textContent = t.modalTitle;
+            document.getElementById('closePrivacyModal').textContent = t.modalCloseButton;
+
+            document.getElementById('confirmation-title').textContent = t.confirmationTitle;
+            document.getElementById('confirmation-message').textContent = t.confirmationMessage;
+            document.getElementById('confirmation-detail').textContent = t.confirmationDetail;
+            document.getElementById('what-next-title').textContent = t.whatNextTitle;
+            const faqLinkText = t.whatNextFaq.includes("FAQ") ? "FAQ" : (t.whatNextFaq.includes("الأسئلة الشائعة") ? "الأسئلة الشائعة" : "ሕቶታት"); // Basic detection
+            document.getElementById('what-next-faq').innerHTML = `${t.whatNextFaq.substring(0, t.whatNextFaq.indexOf(faqLinkText))}<a href="#" class="text-sky-600 hover:underline" onclick="alert('Link naar FAQ (simulatie)')">${faqLinkText}</a>${t.whatNextFaq.substring(t.whatNextFaq.indexOf(faqLinkText) + faqLinkText.length)}`;
+            document.getElementById('what-next-info').textContent = t.whatNextInfo;
+            document.getElementById('new-question-button').textContent = t.newQuestionButton;
+
+            document.documentElement.lang = lang;
+            document.getElementById('form_page_language').value = lang; // Update hidden field for Formspree
+
+            if (lang === 'ar') {
+                document.documentElement.dir = 'rtl';
+            } else {
+                document.documentElement.dir = 'ltr';
+            }
+        }
+
+        const langButtons = document.querySelectorAll('.language-button');
+        langButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                langButtons.forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                const selectedLang = button.getAttribute('data-lang');
+                changeLanguage(selectedLang);
+            });
+        });
+
+        const formSection = document.getElementById('form-section');
+        const confirmationSection = document.getElementById('confirmation-section');
+        const questionForm = document.getElementById('questionForm');
+        const submitButton = document.getElementById('submit-button');
+        const submitButtonText = document.getElementById('submit-button-text');
+        const submitButtonArrow = document.getElementById('submit-button-arrow');
+        const submitSpinner = document.getElementById('submit-spinner');
+
+
+        questionForm.addEventListener('submit', async function(event) {
+            event.preventDefault(); 
+            const currentLang = document.documentElement.lang || 'nl'; 
+            const t = translations[currentLang];
+
+            const email = document.getElementById('email').value;
+            const questionText = document.getElementById('question').value; // Renamed to avoid conflict
+
+            if (!email || !questionText) {
+                alert(t.alertError);
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitSpinner.style.display = 'inline-block';
+            submitButtonText.textContent = t.submittingText;
+            submitButtonArrow.style.display = 'none';
+            
+            const formData = new FormData(questionForm);
+            
+            try {
+                const response = await fetch(questionForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    formSection.style.display = 'none';
+                    confirmationSection.style.display = 'block';
+                    changeLanguage(currentLang); 
+                    window.scrollTo(0,0); 
+                } else {
+                    // Handle server errors or Formspree errors
+                    // You might want to parse response.json() if Formspree returns error details
+                    alert('Er is een fout opgetreden bij het verzenden van het formulier. Probeer het later opnieuw.');
+                }
+            } catch (error) {
+                // Handle network errors
+                console.error('Form submission error:', error);
+                alert('Er is een netwerkfout opgetreden. Controleer uw internetverbinding en probeer het opnieuw.');
+            } finally {
+                submitButton.disabled = false;
+                submitSpinner.style.display = 'none';
+                submitButtonText.textContent = t.submitButtonText; // Reset button text
+                submitButtonArrow.style.display = 'inline-block';
+            }
+        });
+
+        document.getElementById('new-question-button').addEventListener('click', function() {
+            confirmationSection.style.display = 'none';
+            formSection.style.display = 'block';
+            questionForm.reset();
+            const currentLang = document.documentElement.lang || 'nl';
+            changeLanguage(currentLang); 
+            window.scrollTo(0,0);
+        });
+
+
+        const privacyModal = document.getElementById('privacyModal');
+        function showPrivacyPolicy(event) {
+            event.preventDefault();
+            privacyModal.style.display = 'flex';
+        }
+        document.getElementById('closePrivacyModal').addEventListener('click', function() {
+            privacyModal.style.display = 'none';
+        });
+        window.addEventListener('click', function(event) {
+            if (event.target === privacyModal) {
+                privacyModal.style.display = 'none';
+            }
+        });
+
+        changeLanguage('nl');
+
+    </script>
+
+</body>
+</html>
