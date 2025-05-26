@@ -9,19 +9,20 @@
         body {
             font-family: 'Inter', sans-serif; 
         }
-        /* Official Vluchtelingenwerk Nederland Colors - Orange/Dark Text Focus */
         :root {
-            --brand-orange: #E37222;       /* Official Orange (Pantone 158 C) - Main Accent */
-            --brand-orange-darker: #C8641D; /* Darker shade for orange hover - derived */
-            --brand-orange-lighter: #FDF0E6;/* Very light shade for orange backgrounds/hovers - derived */
+            --brand-orange: #E37222;      
+            --brand-orange-darker: #C8641D; 
+            --brand-orange-lighter: #FDF0E6;
+            --brand-orange-x-lighter: #FEFBF7;
             
-            --brand-red-accent: #D52B1E;   /* Official Red (Pantone 485 C) - Secondary if needed */
+            --brand-red-accent: #D52B1E;   
 
-            --brand-text-dark: #1E1E1E;    /* Official Black for text (titles, primary text) */
-            --brand-grey: #988F86;         /* Official Warm Gray */
-            --brand-grey-lighter: #F3F2F0; /* Lighter Warm Gray for subtle backgrounds - derived */
+            --brand-text-dark: #1E1E1E;    
+            --brand-text-medium: #4A4A4A; 
+            --brand-grey: #988F86;         
+            --brand-grey-lighter: #F3F2F0; 
+            --brand-grey-x-lighter: #F8F7F6;
 
-            /* Keeping blue in case it's needed for minor specific elements later, but not as primary */
             --brand-official-blue: #00B9E4; 
         }
 
@@ -33,26 +34,32 @@
         }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+        input, textarea, select {
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border-width: 1px;
+        }
         input:focus, textarea:focus, select:focus {
             outline: 2px solid transparent;
             outline-offset: 2px;
             border-color: var(--brand-orange); 
-            box-shadow: 0 0 0 3px rgba(227, 114, 34, 0.3); /* Shadow with brand orange */
+            box-shadow: 0 0 0 3px rgba(227, 114, 34, 0.25);
         }
         .language-button {
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-            border: 1px solid #D1D5DB; /* Tailwind gray-300 for neutral border */
-            color: var(--brand-text-dark);
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid #D1D5DB; 
+            color: var(--brand-text-medium);
         }
         .language-button:hover {
-            border-color: var(--brand-orange-darker);
+            border-color: var(--brand-orange);
             background-color: var(--brand-orange-lighter);
             color: var(--brand-orange-darker);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
         }
         .language-button.selected {
             background-color: var(--brand-orange); 
             color: white;
             border-color: var(--brand-orange); 
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
         }
         .confirmation-section {
             display: none; 
@@ -63,7 +70,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
+            border: 4px solid rgba(227, 114, 34, 0.2);
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -77,21 +84,26 @@
             100% { transform: rotate(360deg); }
         }
 
-        .btn-primary-accent { /* Renamed to avoid confusion if Tailwind's .btn-primary is used */
+        .btn-primary-accent {
             background-color: var(--brand-orange);
             color: white;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
         .btn-primary-accent:hover {
             background-color: var(--brand-orange-darker);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
         }
         
         .btn-outline-accent {
             color: var(--brand-orange);
             border: 1px solid var(--brand-orange);
+             transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
         .btn-outline-accent:hover {
             background-color: var(--brand-orange-lighter);
             color: var(--brand-orange-darker);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
         }
 
         .text-brand-accent {
@@ -100,29 +112,36 @@
         .text-brand-dark {
             color: var(--brand-text-dark);
         }
-        .bg-brand-grey-lighter {
-            background-color: var(--brand-grey-lighter);
+        .bg-brand-grey-x-lighter {
+            background-color: var(--brand-grey-x-lighter);
         }
-        .border-brand-grey-subtle {
-            border-color: #E5E7EB; /* Tailwind gray-200 */
+        .border-brand-grey-light {
+            border-color: #E5E7EB;
+        }
+        .textarea-appealing {
+            background-color: var(--brand-grey-x-lighter);
+            border-color: #D1D5DB;
+        }
+        .textarea-appealing:focus {
+             background-color: white;
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-700 flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+<body class="bg-slate-50 text-slate-700 flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
 
-    <div class="bg-white shadow-xl rounded-lg p-6 sm:p-8 md:p-12 w-full max-w-3xl">
+    <div class="bg-white shadow-2xl rounded-xl p-6 sm:p-8 md:p-12 w-full max-w-3xl">
         
         <div id="form-section">
             <header class="text-center mb-10">
                 <img src="https://getlogovector.com/wp-content/uploads/2020/01/vluchtelingenwerk-nederland-logo-vector.png" 
                      alt="Logo Vluchtelingenwerk Nederland" 
-                     class="mx-auto mb-6 h-20 w-auto"  onError="this.onerror=null; this.src='https://placehold.co/200x80/FDF0E6/E37222?text=Vluchtelingenwerk+Logo'; this.alt='Fallback Logo Vluchtelingenwerk';">
+                     class="mx-auto mb-6 h-20 sm:h-24 w-auto"  onError="this.onerror=null; this.src='https://placehold.co/200x80/FDF0E6/E37222?text=Vluchtelingenwerk+Logo'; this.alt='Fallback Logo Vluchtelingenwerk';">
                 <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-brand-dark">Deel uw Zorgen</h1>
                 <p id="subtitle" class="text-slate-600 mt-3 text-base md:text-lg">Wij staan klaar om u te helpen. Vul het formulier hieronder in.</p>
-                <p id="mental-health-info" class="mt-4 text-sm md:text-base p-4 rounded-md border bg-brand-grey-lighter border-brand-grey-subtle"></p>
+                <p id="mental-health-info" class="mt-6 text-sm md:text-base p-4 rounded-lg border bg-brand-grey-x-lighter border-brand-grey-light"></p>
             </header>
 
-            <div class="mb-10 p-4 rounded-lg border bg-brand-grey-lighter border-brand-grey-subtle">
+            <div class="mb-10 p-4 rounded-lg border bg-brand-grey-x-lighter border-brand-grey-light">
                 <label id="lang-select-label" class="block text-sm font-medium text-brand-dark mb-3 flex items-center">
                     <span class="form-icon">🌍</span> Kies uw taal / Select your language / اختر لغتك
                 </label>
@@ -147,7 +166,7 @@
                         <span class="form-icon">👤</span> Uw naam (optioneel)
                     </label>
                     <input type="text" name="name" id="name" autocomplete="name"
-                           class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
+                           class="mt-1 block w-full px-4 py-3 border-slate-300 rounded-lg shadow-sm sm:text-sm"
                            placeholder="Vul hier uw naam in">
                 </div>
 
@@ -156,7 +175,7 @@
                         <span class="form-icon">✉️</span> Uw e-mailadres (voor antwoord)
                     </label>
                     <input type="email" name="email" id="email" autocomplete="email" required
-                           class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
+                           class="mt-1 block w-full px-4 py-3 border-slate-300 rounded-lg shadow-sm sm:text-sm"
                            placeholder="voorbeeld@email.com">
                 </div>
 
@@ -165,7 +184,7 @@
                          <span class="form-icon">📞</span> Telefoonnummer (optioneel)
                     </label>
                     <input type="tel" name="phone" id="phone" autocomplete="tel"
-                           class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
+                           class="mt-1 block w-full px-4 py-3 border-slate-300 rounded-lg shadow-sm sm:text-sm"
                            placeholder="+31 6 12345678">
                 </div>
                 
@@ -175,7 +194,7 @@
                             <span class="form-icon">🗣️</span> Taal van uw vraag
                         </label>
                         <select id="question_language" name="question_language" required
-                                class="mt-1 block w-full px-4 py-3 border border-slate-300 bg-white rounded-md shadow-sm sm:text-sm">
+                                class="mt-1 block w-full px-4 py-3 border-slate-300 bg-white rounded-lg shadow-sm sm:text-sm">
                             <option value="nl">Nederlands</option>
                             <option value="en">English</option>
                             <option value="ar">العربية</option>
@@ -196,7 +215,7 @@
                             <span class="form-icon">💬</span> Gewenste taal voor antwoord
                         </label>
                         <select id="answer_language" name="answer_language" required
-                                class="mt-1 block w-full px-4 py-3 border border-slate-300 bg-white rounded-md shadow-sm sm:text-sm">
+                                class="mt-1 block w-full px-4 py-3 border-slate-300 bg-white rounded-lg shadow-sm sm:text-sm">
                             <option value="nl">Nederlands</option>
                             <option value="en">English</option>
                             <option value="ar">العربية</option>
@@ -213,11 +232,11 @@
                     </div>
                 </div>
 
-                <div>
-                    <label for="question" id="label-question" class="block text-sm font-medium text-brand-dark mb-1.5 flex items-center">
-                        <span class="form-icon">❓</span> </label>
-                    <textarea id="question" name="question" rows="7" required
-                              class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
+                <div class="mt-2">
+                    <label for="question" id="label-question" class="block text-base font-medium text-brand-dark mb-2 flex items-center">
+                        <span class="form-icon mr-2">🗨️</span> </label>
+                    <textarea id="question" name="question" rows="8" required
+                              class="mt-1 block w-full px-4 py-3.5 rounded-lg shadow-sm sm:text-base textarea-appealing" 
                               placeholder=""></textarea> </div>
                  <input type="hidden" name="_language" id="form_page_language" value="nl">
 
@@ -227,7 +246,7 @@
                         Door dit formulier in te dienen, gaat u akkoord met ons <a href="#" id="privacy-link-text" class="hover:underline text-brand-accent" onclick="showPrivacyPolicy(event)">privacybeleid</a>. Uw gegevens worden alleen gebruikt om uw vraag te beantwoorden.
                     </p>
                     <button type="submit" id="submit-button"
-                            class="w-full flex items-center justify-center px-6 py-3.5 border border-transparent rounded-md shadow-sm text-base font-medium btn-primary-accent transition-colors disabled:opacity-60">
+                            class="w-full flex items-center justify-center px-6 py-3.5 border border-transparent rounded-lg text-base font-medium btn-primary-accent transition-colors disabled:opacity-60">
                         <div class="spinner" id="submit-spinner"></div>
                         <span id="submit-button-text">Verstuur mijn Vraag</span>
                         <span id="submit-button-arrow" class="ml-2 transform transition-transform duration-200 group-hover:translate-x-1">➔</span> 
@@ -246,14 +265,14 @@
             <p id="confirmation-message" class="text-slate-600 mb-3 text-base">Uw vraag is succesvol verzonden.</p>
             <p id="confirmation-detail" class="text-slate-600 mb-8 text-base">We nemen zo spoedig mogelijk contact met u op via het opgegeven e-mailadres. Controleer ook uw spamfolder.</p>
             
-            <div class="mt-10 p-6 rounded-lg bg-brand-grey-lighter border-brand-grey-subtle">
+            <div class="mt-10 p-6 rounded-lg bg-brand-grey-x-lighter border-brand-grey-light">
                 <h3 id="what-next-title" class="text-xl font-semibold mb-3 text-brand-dark">Wat nu?</h3>
                 <p id="what-next-faq" class="text-sm text-slate-700 mb-2">Bekijk onze <a href="#" class="font-medium hover:underline text-brand-accent" onclick="customAlert('Link to FAQ (simulation) - Please replace with actual link or modal.', 'Info')">Veelgestelde Vragen (FAQ)</a> pagina voor mogelijke antwoorden.</p>
                 <p id="what-next-info" class="text-sm text-slate-700">We streven ernaar binnen [X] werkdagen te antwoorden.</p>
             </div>
 
             <button type="button" id="new-question-button"
-                    class="mt-10 w-full sm:w-auto px-8 py-3 border rounded-md shadow-sm text-base font-medium btn-outline-accent transition-colors">
+                    class="mt-10 w-full sm:w-auto px-8 py-3 border rounded-lg shadow-sm text-base font-medium btn-outline-accent transition-colors">
                 Stel nog een vraag
             </button>
         </div>
@@ -262,10 +281,11 @@
 
     <footer class="text-center mt-12 mb-6 text-sm text-slate-500">
         <p id="footer-copy">&copy; <span id="currentYear"></span> Vluchtelingenwerk Nederland. Alle rechten voorbehouden.</p>
+         <p id="footer-note" class="text-xs mt-1">Dit is een voorbeeldpagina. Formulierinzendingen worden niet verwerkt tenzij Formspree correct is geconfigureerd.</p>
     </footer>
 
     <div id="privacyModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center" style="display: none; z-index: 100;">
-        <div class="relative mx-auto p-6 border-0 w-11/12 md:w-1/2 lg:w-2/5 shadow-2xl rounded-lg bg-white">
+        <div class="relative mx-auto p-6 border-0 w-11/12 md:w-1/2 lg:w-2/5 shadow-2xl rounded-xl bg-white">
             <div class="mt-3 text-center">
                 <h3 id="modal-title" class="text-xl leading-6 font-bold mb-4 text-brand-dark">Privacybeleid (Voorbeeld)</h3>
                 <div id="modal-content" class="mt-2 px-4 py-3 text-sm text-slate-600 text-left space-y-3 leading-relaxed">
@@ -276,7 +296,7 @@
                     <p>Voor meer informatie kunt u contact met ons opnemen.</p>
                 </div>
                 <div class="items-center px-4 py-4 mt-4">
-                    <button id="closePrivacyModal" class="w-full px-6 py-2.5 btn-primary-accent text-base font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2" style="--tw-ring-color: var(--brand-orange-darker);">
+                    <button id="closePrivacyModal" class="w-full px-6 py-2.5 btn-primary-accent text-base font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2" style="--tw-ring-color: var(--brand-orange-darker);">
                         Sluiten
                     </button>
                 </div>
@@ -285,15 +305,11 @@
     </div>
     
     <script>
-        // JavaScript (translations and logic) remains largely the same as the previous version.
-        // The key changes are in CSS variables and their application in HTML for the new color scheme.
-        // Ensure all translations are up-to-date.
-
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         const footerOrgName = "Vluchtelingenwerk Nederland";
         const currentYear = new Date().getFullYear();
 
-        const translations = { // Ensure all texts are translated, including fallbacks
+        const translations = { 
             nl: {
                 pageTitle: "Deel uw Zorgen - Vluchtelingenwerk Nederland",
                 mainTitle: "Deel uw Zorgen",
@@ -309,8 +325,8 @@
                 placeholderPhone: "+31 6 12345678",
                 labelQuestionLang: "🗣️ Taal van uw bericht",
                 labelAnswerLang: "💬 Gewenste taal voor antwoord",
-                labelQuestion: "❓ Deel wat u bezighoudt. Voel u vrij om alles te uiten.",
-                placeholderQuestion: "Vertel ons alstublieft wat u dwarszit. Dit is een veilige plek om uw gedachten en gevoelens te delen...",
+                labelQuestion: "🗨️ Deel wat u bezighoudt. Voel u vrij om alles te uiten.",
+                placeholderQuestion: "Vertel ons alstublieft wat u dwarszit. Dit is een veilige en vertrouwelijke plek om uw gedachten en gevoelens te delen...",
                 privacyInfo: "Door dit formulier in te dienen, gaat u akkoord met ons ",
                 privacyLinkText: "privacybeleid",
                 privacyInfoCont: ". Uw gegevens worden alleen gebruikt om uw vraag te beantwoorden.",
@@ -347,8 +363,8 @@
                 placeholderPhone: "+31 6 12345678",
                 labelQuestionLang: "🗣️ Language of your message",
                 labelAnswerLang: "💬 Preferred language for reply",
-                labelQuestion: "❓ Share what's on your mind. Feel free to express yourself.",
-                placeholderQuestion: "Please tell us what's troubling you. This is a safe space to share your thoughts and feelings...",
+                labelQuestion: "🗨️ Share what's on your mind. Feel free to express yourself.",
+                placeholderQuestion: "Please tell us what's troubling you. This is a safe and confidential space to share your thoughts and feelings...",
                 privacyInfo: "By submitting this form, you agree to our ",
                 privacyLinkText: "privacy policy",
                 privacyInfoCont: ". Your data will only be used to answer your question.",
@@ -385,8 +401,8 @@
                 placeholderPhone: "+31 6 12345678",
                 labelQuestionLang: "🗣️ لغة رسالتك",
                 labelAnswerLang: "💬 اللغة المفضلة للرد",
-                labelQuestion: "❓ شارك ما يجول في خاطرك. لا تتردد في التعبير عن نفسك.",
-                placeholderQuestion: "من فضلك أخبرنا ما يزعجك. هذا مكان آمن لمشاركة أفكارك ومشاعرك...",
+                labelQuestion: "🗨️ شارك ما يجول في خاطرك. لا تتردد في التعبير عن نفسك.",
+                placeholderQuestion: "من فضلك أخبرنا ما يزعجك. هذا مكان آمن وسري لمشاركة أفكارك ومشاعرك...",
                 privacyInfo: "بإرسال هذا النموذج، فإنك توافق على ",
                 privacyLinkText: "سياسة الخصوصية",
                 privacyInfoCont: " الخاصة بنا. سيتم استخدام بياناتك فقط للرد على سؤالك.",
@@ -419,12 +435,12 @@
                 placeholderName: "ኣብዚ ስምኩም የእትዉ",
                 labelEmail: "✉️ ኢሜይል ኣድራሻኹም (ንመልሲ)",
                 placeholderEmail: "example@email.com",
-                labelPhone: "📞 ቁጽሪ ተሌፎን (ዘይግድነት)",
+                labelPhone: "� ቁጽሪ ተሌፎን (ዘይግድነት)",
                 placeholderPhone: "+31 6 12345678",
                 labelQuestionLang: "🗣️ ቋንቋ መልእኽትኹም",
                 labelAnswerLang: "💬 ንመልሲ እትመርጽዎ ቋንቋ",
-                labelQuestion: "❓ ኣብ ልብኹም ዘሎ ነገር ኣካፍሉ። ስምዒትኩም ንምግላጽ ነጻ ኩኑ።",
-                placeholderQuestion: "እንታይ ከም ዘሻቕለኩም በጃኹም ንገሩና። እዚ ሓሳብኩምን ስምዒትኩምን ንምክፋል ውሑስ ቦታ እዩ...",
+                labelQuestion: "🗨️ ኣብ ልብኹም ዘሎ ነገር ኣካፍሉ። ስምዒትኩም ንምግላጽ ነጻ ኩኑ።",
+                placeholderQuestion: "እንታይ ከም ዘሻቕለኩም በጃኹም ንገሩና። እዚ ሓሳብኩምን ስምዒትኩምን ንምክፋል ውሑስን ምስጢራውን ቦታ እዩ...",
                 privacyInfo: "ነዚ ቅጥዒ ብምቕራብኩም፡ ን ናትና ",
                 privacyLinkText: "መምርሒ ብሕታዊነት",
                 privacyInfoCont: " ትሰማምዑ ኣለኹም። տվյալները կօգտագործվեն միայն ձեր հարցին պատասխանելու համար.",
@@ -436,7 +452,7 @@
                 alertErrorTitle: "ጌጋ",
                 alertError: "በጃኹም ኢሜይል ኣድራሻኹምን መልእኽትኹምን ምልኡ።",
                 submitErrorFallback: "ኣብ እዋን ምልኣኽ ጌጋ ኣጋጢሙ። በጃኹም እንደገና ፈትኑ።",
-                networkErrorFallback: "ናይ መርበብ ጌጋ ኣጋጢሙ። በጃኹም መራኸቢኹም መርምሩ እሞ እንደገና ፈትኑ።",
+                networkErrorFallback: "ናይ መрበብ ጌጋ ኣጋጢሙ። በጃኹም መራኸቢኹም መርምሩ እሞ እንደገና ፈትኑ።",
                 confirmationTitle: "ንመልእኽትኹም የቀንየልና!",
                 confirmationMessage: "መልእኽትኹም ብዓወት ተላኢኹ ኣሎ።",
                 confirmationDetail: "ብዝተኻእለና መጠን ቀልጢፍና በቲ ዝሃብኩምና ኢሜይል ኣድራሻ ክንረኽበኩም። በጃኹም፡ ነቲ ናይ ስፓም ፎልደርኩም እውን መрምርዎ።",
@@ -446,7 +462,6 @@
                 newQuestionButton: "ካልእ ነገር ኣካፍሉ",
                 submittingText: "ይስደድ ኣሎ..."
             },
-            // Ensure other languages (tr, fa, so, ku, ru, uk) also have these new fallback keys translated
             tr: { 
                 pageTitle: "Endişelerinizi Paylaşın - Hollanda Mültecilere Yardım Kuruluşu",
                 mainTitle: "Endişelerinizi Paylaşın",
@@ -462,8 +477,8 @@
                 placeholderPhone: "+90 5xxxxxxxxx",
                 labelQuestionLang: "🗣️ Mesajınızın dili",
                 labelAnswerLang: "💬 Yanıt için tercih edilen dil",
-                labelQuestion: "❓ Aklınızdan geçenleri paylaşın. Kendinizi özgürce ifade edin.",
-                placeholderQuestion: "Lütfen sizi neyin rahatsız ettiğini bize anlatın. Burası düşüncelerinizi ve duygularınızı paylaşabileceğiniz güvenli bir alandır...",
+                labelQuestion: "🗨️ Aklınızdan geçenleri paylaşın. Kendinizi özgürce ifade edin.", 
+                placeholderQuestion: "Lütfen sizi neyin rahatsız ettiğini bize anlatın. Burası düşüncelerinizi ve duygularınızı paylaşabileceğiniz güvenli ve gizli bir alandır...", 
                 privacyInfo: "Bu formu göndererek, ",
                 privacyLinkText: "gizlilik politikamızı",
                 privacyInfoCont: " kabul etmiş olursunuz. Verileriniz yalnızca sorunuzu yanıtlamak için kullanılacaktır.",
@@ -500,8 +515,8 @@
                 placeholderPhone: "+98 9xxxxxxxxx",
                 labelQuestionLang: "🗣️ زبان پیام شما",
                 labelAnswerLang: "💬 زبان ترجیحی برای پاسخ",
-                labelQuestion: "❓ آنچه در ذهن دارید را به اشتراک بگذارید. احساسات خود را آزادانه بیان کنید.",
-                placeholderQuestion: "لطفاً به ما بگویید چه چیزی شما را آزار می دهد. اینجا یک فضای امن برای به اشتراک گذاشتن افکار و احساسات شماست...",
+                labelQuestion: "🗨️ آنچه در ذهن دارید را به اشتراک بگذارید. احساسات خود را آزادانه بیان کنید.", 
+                placeholderQuestion: "لطفاً به ما بگویید چه چیزی شما را آزار می دهد. اینجا یک فضای امن و محرمانه برای به اشتراک گذاشتن افکار و احساسات شماست...", 
                 privacyInfo: "با ارسال این فرم، شما با ",
                 privacyLinkText: "سیاست حفظ حریم خصوصی",
                 privacyInfoCont: " ما موافقت می کنید. اطلاعات شما فقط برای پاسخ به سوال شما استفاده خواهد شد.",
@@ -538,8 +553,8 @@
                 placeholderPhone: "+252 6xxxxxxx",
                 labelQuestionLang: "🗣️ Luqadda farriintaada",
                 labelAnswerLang: "💬 Luqadda aad doorbidayso jawaabta",
-                labelQuestion: "❓ La wadaag waxa maskaxdaada ku jira. Si xor ah u muuji dareenkaaga.",
-                placeholderQuestion: "Fadlan noo sheeg waxa ku dhibaya. Kani waa meel aamin ah oo aad kula wadaagi karto fikradahaaga iyo dareenkaaga...",
+                labelQuestion: "🗨️ La wadaag waxa maskaxdaada ku jira. Si xor ah u muuji dareenkaaga.", 
+                placeholderQuestion: "Fadlan noo sheeg waxa ku dhibaya. Kani waa meel aamin ah oo qarsoodi ah oo aad kula wadaagi karto fikradahaaga iyo dareenkaaga...", 
                 privacyInfo: "Markaad soo gudbiso foomkan, waxaad ogolaatay ",
                 privacyLinkText: "siyaasaddayada khaaska ah",
                 privacyInfoCont: ". Xogtaada waxaa kaliya loo isticmaali doonaa in lagaaga jawaabo su'aashaada.",
@@ -576,8 +591,8 @@
                 placeholderPhone: "+90 5xxxxxxxxx",
                 labelQuestionLang: "🗣️ Zimanê peyama we",
                 labelAnswerLang: "💬 Zimanê bijartî ji bo bersivê",
-                labelQuestion: "❓ Tiştên ku di hişê we de ne parve bikin. Hestên xwe bi azadî îfade bikin.",
-                placeholderQuestion: "Ji kerema xwe ji me re bêjin ka çi we aciz dike. Ev cîhek ewle ye ku hûn raman û hestên xwe parve bikin...",
+                labelQuestion: "🗨️ Tiştên ku di hişê we de ne parve bikin. Hestên xwe bi azadî îfade bikin.", 
+                placeholderQuestion: "Ji kerema xwe ji me re bêjin ka çi we aciz dike. Ev cîhek ewle û نهێنی ye ku hûn raman û hestên xwe parve bikin...", 
                 privacyInfo: "Bi şandina vê formê, hûn bi ",
                 privacyLinkText: "polîtîkaya nepenîtiyê",
                 privacyInfoCont: " ya me razî dibin. Daneyên we dê tenê ji bo bersivdana pirsa we werin bikar anîn.",
@@ -614,8 +629,8 @@
                 placeholderPhone: "+7 9xxxxxxxxx",
                 labelQuestionLang: "🗣️ Язык вашего сообщения",
                 labelAnswerLang: "💬 Предпочитаемый язык для ответа",
-                labelQuestion: "❓ Поделитесь тем, что у вас на уме. Не стесняйтесь выражать свои чувства.",
-                placeholderQuestion: "Пожалуйста, расскажите нам, что вас беспокоит. Это безопасное место, чтобы поделиться своими мыслями и чувствами...",
+                labelQuestion: "🗨️ Поделитесь тем, что у вас на уме. Не стесняйтесь выражать свои чувства.", 
+                placeholderQuestion: "Пожалуйста, расскажите нам, что вас беспокоит. Это безопасное и конфиденциальное место, чтобы поделиться своими мыслями и чувствами...", 
                 privacyInfo: "Отправляя эту форму, вы соглашаетесь с нашей ",
                 privacyLinkText: "политикой конфиденциальности",
                 privacyInfoCont: ". Ваши данные будут использованы только для ответа на ваш вопрос.",
@@ -652,8 +667,8 @@
                 placeholderPhone: "+380 xx xxx xx xx",
                 labelQuestionLang: "🗣️ Мова вашого повідомлення",
                 labelAnswerLang: "💬 Бажана мова для відповіді",
-                labelQuestion: "❓ Поділіться тим, що у вас на думці. Не соромтеся висловлювати свої почуття.",
-                placeholderQuestion: "Будь ласка, розкажіть нам, що вас турбує. Це безпечне місце, щоб поділитися своїми думками та почуттями...",
+                labelQuestion: "🗨️ Поділіться тим, що у вас на думці. Не соромтеся висловлювати свої почуття.", 
+                placeholderQuestion: "Будь ласка, розкажіть нам, що вас турбує. Це безпечне та конфіденційне місце, щоб поділитися своїми думками та почуттями...", 
                 privacyInfo: "Надсилаючи цю форму, ви погоджуєтеся з нашою ",
                 privacyLinkText: "політикою конфіденційності",
                 privacyInfoCont: ". Ваші дані будуть використані лише для відповіді на ваше запитання.",
@@ -720,7 +735,7 @@
             document.getElementById('label-answer-lang').innerHTML = `<span class="form-icon">💬</span> ${labelAnswerLangText.includes(' ') ? labelAnswerLangText.substring(labelAnswerLangText.indexOf(' ') + 1) : labelAnswerLangText}`;
             
             const labelQuestionText = getTranslation(lang, 'labelQuestion');
-            document.getElementById('label-question').innerHTML = `<span class="form-icon">❓</span> ${labelQuestionText.includes(' ') ? labelQuestionText.substring(labelQuestionText.indexOf(' ') + 1) : labelQuestionText}`;
+            document.getElementById('label-question').innerHTML = `<span class="form-icon mr-2">🗨️</span> ${labelQuestionText.includes(' ') ? labelQuestionText.substring(labelQuestionText.indexOf(' ') + 1) : labelQuestionText}`;
             document.getElementById('question').placeholder = getTranslation(lang, 'placeholderQuestion');
 
             const privacyInfoP = document.getElementById('privacy-info');
@@ -748,7 +763,7 @@
             let linkTextFound = "FAQ"; 
 
             for (const keyword of faqKeywords) {
-                const regex = new RegExp(`^(.*?)(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(.*)$`, 'i'); // Escape keyword for regex
+                const regex = new RegExp(`^(.*?)(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(.*)$`, 'i'); 
                 const faqMatch = translatedFaqFullText.match(regex);
                 if (faqMatch) {
                     linkTextFound = faqMatch[2];
@@ -802,7 +817,7 @@
         alertModal.style.display = 'none';
         alertModal.style.zIndex = '200'; 
         alertModal.innerHTML = `
-            <div class="relative mx-auto p-6 border-0 w-11/12 md:w-1/3 max-w-md shadow-2xl rounded-lg bg-white">
+            <div class="relative mx-auto p-6 border-0 w-11/12 md:w-1/3 max-w-md shadow-2xl rounded-xl bg-white">
                 <div class="mt-3 text-center">
                     <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                         <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -814,7 +829,7 @@
                         <p class="text-sm text-slate-600" id="alertModalMessage"></p>
                     </div>
                     <div class="items-center px-4 py-3 mt-2">
-                        <button id="closeAlertModal" class="w-full px-6 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        <button id="closeAlertModal" class="w-full px-6 py-2 bg-red-600 text-white text-base font-medium rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                             OK
                         </button>
                     </div>
@@ -915,9 +930,7 @@
                 }
             });
             changeLanguage(currentLang); 
-            window.scrollTo(0,0);© 2025 Vluchtelingenwerk Nederland. Alle rechten voorbehouden.
-
-
+            window.scrollTo(0,0);
         });
 
         const privacyModal = document.getElementById('privacyModal');
@@ -964,3 +977,4 @@
 
 </body>
 </html>
+�
