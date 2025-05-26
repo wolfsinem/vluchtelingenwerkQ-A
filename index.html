@@ -3,41 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stel uw Vraag - Vluchtelingenwerk</title>
+    <title>Deel uw Zorgen - Vluchtelingenwerk</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Visualization & Content Choices: 
-        - HTML formulier met Tailwind CSS, nu geconfigureerd voor Formspree.
-        - Client-side bevestiging na (gesimuleerde) succesvolle Formspree-inzending.
-        - Pictogrammen en taalwissel functionaliteit behouden.
-    -->
     <style>
         body {
             font-family: 'Inter', sans-serif; 
         }
+        /* Official Vluchtelingenwerk Nederland Colors - Orange/Dark Text Focus */
+        :root {
+            --brand-orange: #E37222;       /* Official Orange (Pantone 158 C) - Main Accent */
+            --brand-orange-darker: #C8641D; /* Darker shade for orange hover - derived */
+            --brand-orange-lighter: #FDF0E6;/* Very light shade for orange backgrounds/hovers - derived */
+            
+            --brand-red-accent: #D52B1E;   /* Official Red (Pantone 485 C) - Secondary if needed */
+
+            --brand-text-dark: #1E1E1E;    /* Official Black for text (titles, primary text) */
+            --brand-grey: #988F86;         /* Official Warm Gray */
+            --brand-grey-lighter: #F3F2F0; /* Lighter Warm Gray for subtle backgrounds - derived */
+
+            /* Keeping blue in case it's needed for minor specific elements later, but not as primary */
+            --brand-official-blue: #00B9E4; 
+        }
+
         .form-icon {
             width: 1.25rem; 
             height: 1.25rem; 
             margin-right: 0.5rem; 
-            color: #0369a1; 
+            color: var(--brand-orange); 
         }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         input:focus, textarea:focus, select:focus {
             outline: 2px solid transparent;
             outline-offset: 2px;
-            border-color: #0284c7; 
-            box-shadow: 0 0 0 2px #38bdf8; 
+            border-color: var(--brand-orange); 
+            box-shadow: 0 0 0 3px rgba(227, 114, 34, 0.3); /* Shadow with brand orange */
         }
         .language-button {
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            border: 1px solid #D1D5DB; /* Tailwind gray-300 for neutral border */
+            color: var(--brand-text-dark);
+        }
+        .language-button:hover {
+            border-color: var(--brand-orange-darker);
+            background-color: var(--brand-orange-lighter);
+            color: var(--brand-orange-darker);
         }
         .language-button.selected {
-            background-color: #0284c7; 
+            background-color: var(--brand-orange); 
             color: white;
-            border-color: #0284c7; 
+            border-color: var(--brand-orange); 
         }
         .confirmation-section {
-            display: none; /* Hidden by default */
+            display: none; 
             animation: fadeIn 0.5s ease-in-out;
         }
         @keyframes fadeIn {
@@ -49,189 +67,238 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border-left-color: #0284c7; /* sky-600 */
+            border-left-color: var(--brand-orange); 
             animation: spin 1s ease infinite;
-            display: none; /* Hidden by default */
+            display: none; 
             margin-right: 0.5rem;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .btn-primary-accent { /* Renamed to avoid confusion if Tailwind's .btn-primary is used */
+            background-color: var(--brand-orange);
+            color: white;
+        }
+        .btn-primary-accent:hover {
+            background-color: var(--brand-orange-darker);
+        }
+        
+        .btn-outline-accent {
+            color: var(--brand-orange);
+            border: 1px solid var(--brand-orange);
+        }
+        .btn-outline-accent:hover {
+            background-color: var(--brand-orange-lighter);
+            color: var(--brand-orange-darker);
+        }
+
+        .text-brand-accent {
+            color: var(--brand-orange);
+        }
+        .text-brand-dark {
+            color: var(--brand-text-dark);
+        }
+        .bg-brand-grey-lighter {
+            background-color: var(--brand-grey-lighter);
+        }
+        .border-brand-grey-subtle {
+            border-color: #E5E7EB; /* Tailwind gray-200 */
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col items-center justify-center min-h-screen p-4">
+<body class="bg-slate-100 text-slate-700 flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
 
-    <div class="bg-white shadow-xl rounded-lg p-6 md:p-10 w-full max-w-2xl">
+    <div class="bg-white shadow-xl rounded-lg p-6 sm:p-8 md:p-12 w-full max-w-3xl">
         
         <div id="form-section">
-            <header class="text-center mb-8">
-                <img src="https://placehold.co/100x100/0284c7/FFFFFF?text=Logo" alt="Logo Vluchtelingenwerk" class="mx-auto mb-4 h-16 w-auto" onerror="this.onerror=null; this.src='https://placehold.co/80x80/E0E0E0/B0B0B0?text=Logo';">
-                <h1 id="main-title" class="text-3xl font-bold text-sky-700">Stel uw Vraag</h1>
-                <p id="subtitle" class="text-slate-600 mt-2">Wij staan klaar om u te helpen. Vul het formulier hieronder in.</p>
+            <header class="text-center mb-10">
+                <img src="https://getlogovector.com/wp-content/uploads/2020/01/vluchtelingenwerk-nederland-logo-vector.png" 
+                     alt="Logo Vluchtelingenwerk Nederland" 
+                     class="mx-auto mb-6 h-20 w-auto"  onError="this.onerror=null; this.src='https://placehold.co/200x80/FDF0E6/E37222?text=Vluchtelingenwerk+Logo'; this.alt='Fallback Logo Vluchtelingenwerk';">
+                <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-brand-dark">Deel uw Zorgen</h1>
+                <p id="subtitle" class="text-slate-600 mt-3 text-base md:text-lg">Wij staan klaar om u te helpen. Vul het formulier hieronder in.</p>
+                <p id="mental-health-info" class="mt-4 text-sm md:text-base p-4 rounded-md border bg-brand-grey-lighter border-brand-grey-subtle"></p>
             </header>
 
-            <div class="mb-8 p-4 bg-sky-50 rounded-md border border-sky-200">
-                <label id="lang-select-label" class="block text-sm font-medium text-slate-700 mb-2 flex items-center">
+            <div class="mb-10 p-4 rounded-lg border bg-brand-grey-lighter border-brand-grey-subtle">
+                <label id="lang-select-label" class="block text-sm font-medium text-brand-dark mb-3 flex items-center">
                     <span class="form-icon">🌍</span> Kies uw taal / Select your language / اختر لغتك
                 </label>
                 <div class="flex flex-wrap gap-2">
-                    <button type="button" data-lang="nl" class="language-button selected text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">Nederlands</button>
-                    <button type="button" data-lang="en" class="language-button text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">English</button>
-                    <button type="button" data-lang="ar" class="language-button text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">العربية</button>
-                    <button type="button" data-lang="ti" class="language-button text-sm px-3 py-1.5 border border-slate-300 rounded-md hover:bg-sky-100">ትግርኛ</button>
+                    <button type="button" data-lang="nl" class="language-button selected text-sm px-3 py-1.5 rounded-md">Nederlands</button>
+                    <button type="button" data-lang="en" class="language-button text-sm px-3 py-1.5 rounded-md">English</button>
+                    <button type="button" data-lang="ar" class="language-button text-sm px-3 py-1.5 rounded-md">العربية</button>
+                    <button type="button" data-lang="ti" class="language-button text-sm px-3 py-1.5 rounded-md">ትግርኛ</button>
+                    <button type="button" data-lang="tr" class="language-button text-sm px-3 py-1.5 rounded-md">Türkçe</button>
+                    <button type="button" data-lang="fa" class="language-button text-sm px-3 py-1.5 rounded-md">فارسی</button>
+                    <button type="button" data-lang="so" class="language-button text-sm px-3 py-1.5 rounded-md">Soomaali</button>
+                    <button type="button" data-lang="ku" class="language-button text-sm px-3 py-1.5 rounded-md">Kurdî</button>
+                    <button type="button" data-lang="ru" class="language-button text-sm px-3 py-1.5 rounded-md">Русский</button>
+                    <button type="button" data-lang="uk" class="language-button text-sm px-3 py-1.5 rounded-md">Українська</button>
                 </div>
-                <p id="lang-select-hint" class="text-xs text-slate-500 mt-2">Selecteer de taal waarin u het formulier wilt invullen en antwoord wilt ontvangen.</p>
+                <p id="lang-select-hint" class="text-xs text-slate-600 mt-3">Selecteer de taal waarin u het formulier wilt invullen en antwoord wilt ontvangen.</p>
             </div>
 
-            <form id="questionForm" action="https://formspree.io/f/xkgrlbkl" method="POST" class="space-y-6">
+            <form id="questionForm" action="https://formspree.io/f/xkgrlbkl" method="POST" class="space-y-8">
                 <div>
-                    <label for="name" id="label-name" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                    <label for="name" id="label-name" class="block text-sm font-medium text-brand-dark mb-1.5 flex items-center">
                         <span class="form-icon">👤</span> Uw naam (optioneel)
                     </label>
                     <input type="text" name="name" id="name" autocomplete="name"
-                           class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+                           class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
                            placeholder="Vul hier uw naam in">
                 </div>
 
                 <div>
-                    <label for="email" id="label-email" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                    <label for="email" id="label-email" class="block text-sm font-medium text-brand-dark mb-1.5 flex items-center">
                         <span class="form-icon">✉️</span> Uw e-mailadres (voor antwoord)
                     </label>
                     <input type="email" name="email" id="email" autocomplete="email" required
-                           class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+                           class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
                            placeholder="voorbeeld@email.com">
                 </div>
 
                 <div>
-                    <label for="phone" id="label-phone" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                    <label for="phone" id="label-phone" class="block text-sm font-medium text-brand-dark mb-1.5 flex items-center">
                          <span class="form-icon">📞</span> Telefoonnummer (optioneel)
                     </label>
                     <input type="tel" name="phone" id="phone" autocomplete="tel"
-                           class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
+                           class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
                            placeholder="+31 6 12345678">
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
                     <div>
-                        <label for="question_language" id="label-question-lang" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                        <label for="question_language" id="label-question-lang" class="block text-sm font-medium text-brand-dark mb-1.5 flex items-center">
                             <span class="form-icon">🗣️</span> Taal van uw vraag
                         </label>
                         <select id="question_language" name="question_language" required
-                                class="mt-1 block w-full px-4 py-2.5 border border-slate-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                                class="mt-1 block w-full px-4 py-3 border border-slate-300 bg-white rounded-md shadow-sm sm:text-sm">
                             <option value="nl">Nederlands</option>
                             <option value="en">English</option>
                             <option value="ar">العربية</option>
                             <option value="ti">ትግርኛ</option>
-                            <option value="fr">Français</option>
-                            <option value="fa">فارسی/دری</option>
+                            <option value="tr">Türkçe</option>
+                            <option value="fa">فارسی</option>
                             <option value="so">Soomaali</option>
+                            <option value="ku">Kurdî</option>
+                            <option value="ru">Русский</option>
                             <option value="uk">Українська</option>
+                            <option value="fr">Français</option> 
                             <option value="other">Anders</option>
                         </select>
                     </div>
 
                     <div>
-                        <label for="answer_language" id="label-answer-lang" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
+                        <label for="answer_language" id="label-answer-lang" class="block text-sm font-medium text-brand-dark mb-1.5 flex items-center">
                             <span class="form-icon">💬</span> Gewenste taal voor antwoord
                         </label>
                         <select id="answer_language" name="answer_language" required
-                                class="mt-1 block w-full px-4 py-2.5 border border-slate-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm">
+                                class="mt-1 block w-full px-4 py-3 border border-slate-300 bg-white rounded-md shadow-sm sm:text-sm">
                             <option value="nl">Nederlands</option>
                             <option value="en">English</option>
                             <option value="ar">العربية</option>
                             <option value="ti">ትግርኛ</option>
-                            <option value="fr">Français</option>
-                            <option value="fa">فارسی/دری</option>
+                            <option value="tr">Türkçe</option>
+                            <option value="fa">فارسی</option>
                             <option value="so">Soomaali</option>
+                            <option value="ku">Kurdî</option>
+                            <option value="ru">Русский</option>
                             <option value="uk">Українська</option>
+                            <option value="fr">Français</option>
                             <option value="same">Zelfde als vraag</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label for="question" id="label-question" class="block text-sm font-medium text-slate-700 mb-1 flex items-center">
-                        <span class="form-icon">❓</span> Uw vraag
-                    </label>
-                    <textarea id="question" name="question" rows="6" required
-                              class="mt-1 block w-full px-4 py-2.5 border border-slate-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
-                              placeholder="Typ hier uw vraag zo duidelijk mogelijk..."></textarea>
-                </div>
+                    <label for="question" id="label-question" class="block text-sm font-medium text-brand-dark mb-1.5 flex items-center">
+                        <span class="form-icon">❓</span> </label>
+                    <textarea id="question" name="question" rows="7" required
+                              class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-md shadow-sm sm:text-sm"
+                              placeholder=""></textarea> </div>
                  <input type="hidden" name="_language" id="form_page_language" value="nl">
 
 
-                <div class="pt-2">
-                    <p id="privacy-info" class="text-xs text-slate-500 mb-4">
-                        Door dit formulier in te dienen, gaat u akkoord met ons <a href="#" id="privacy-link-text" class="text-sky-600 hover:underline" onclick="showPrivacyPolicy(event)">privacybeleid</a>. Uw gegevens worden alleen gebruikt om uw vraag te beantwoorden.
+                <div class="pt-4">
+                    <p id="privacy-info" class="text-xs text-slate-500 mb-6"> 
+                        Door dit formulier in te dienen, gaat u akkoord met ons <a href="#" id="privacy-link-text" class="hover:underline text-brand-accent" onclick="showPrivacyPolicy(event)">privacybeleid</a>. Uw gegevens worden alleen gebruikt om uw vraag te beantwoorden.
                     </p>
                     <button type="submit" id="submit-button"
-                            class="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors disabled:opacity-50">
+                            class="w-full flex items-center justify-center px-6 py-3.5 border border-transparent rounded-md shadow-sm text-base font-medium btn-primary-accent transition-colors disabled:opacity-60">
                         <div class="spinner" id="submit-spinner"></div>
                         <span id="submit-button-text">Verstuur mijn Vraag</span>
-                        <span id="submit-button-arrow" class="ml-2">➔</span> 
+                        <span id="submit-button-arrow" class="ml-2 transform transition-transform duration-200 group-hover:translate-x-1">➔</span> 
                     </button>
                 </div>
             </form>
         </div>
 
-        <div id="confirmation-section" class="confirmation-section text-center">
-            <div class="text-emerald-500 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <div id="confirmation-section" class="confirmation-section text-center py-10">
+            <div class="mb-6 text-green-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <h2 id="confirmation-title" class="text-2xl font-bold text-slate-800 mb-3">Bedankt voor uw vraag!</h2>
-            <p id="confirmation-message" class="text-slate-600 mb-2">Uw vraag is succesvol verzonden.</p>
-            <p id="confirmation-detail" class="text-slate-600 mb-6">We nemen zo spoedig mogelijk contact met u op via het opgegeven e-mailadres. Controleer ook uw spamfolder.</p>
+            <h2 id="confirmation-title" class="text-2xl md:text-3xl font-bold text-brand-dark mb-4">Bedankt voor uw vraag!</h2>
+            <p id="confirmation-message" class="text-slate-600 mb-3 text-base">Uw vraag is succesvol verzonden.</p>
+            <p id="confirmation-detail" class="text-slate-600 mb-8 text-base">We nemen zo spoedig mogelijk contact met u op via het opgegeven e-mailadres. Controleer ook uw spamfolder.</p>
             
-            <div class="mt-8 p-4 bg-slate-100 rounded-md">
-                <h3 id="what-next-title" class="text-lg font-semibold text-slate-700 mb-2">Wat nu?</h3>
-                <p id="what-next-faq" class="text-sm text-slate-600 mb-2">Bekijk onze <a href="#" class="text-sky-600 hover:underline" onclick="alert('Link naar FAQ (simulatie)')">Veelgestelde Vragen (FAQ)</a> pagina voor mogelijke antwoorden.</p>
-                <p id="what-next-info" class="text-sm text-slate-600">We streven ernaar binnen [X] werkdagen te antwoorden.</p>
+            <div class="mt-10 p-6 rounded-lg bg-brand-grey-lighter border-brand-grey-subtle">
+                <h3 id="what-next-title" class="text-xl font-semibold mb-3 text-brand-dark">Wat nu?</h3>
+                <p id="what-next-faq" class="text-sm text-slate-700 mb-2">Bekijk onze <a href="#" class="font-medium hover:underline text-brand-accent" onclick="customAlert('Link to FAQ (simulation) - Please replace with actual link or modal.', 'Info')">Veelgestelde Vragen (FAQ)</a> pagina voor mogelijke antwoorden.</p>
+                <p id="what-next-info" class="text-sm text-slate-700">We streven ernaar binnen [X] werkdagen te antwoorden.</p>
             </div>
 
             <button type="button" id="new-question-button"
-                    class="mt-8 w-full md:w-auto px-6 py-3 border border-sky-600 text-sky-600 rounded-md shadow-sm text-base font-medium hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors">
+                    class="mt-10 w-full sm:w-auto px-8 py-3 border rounded-md shadow-sm text-base font-medium btn-outline-accent transition-colors">
                 Stel nog een vraag
             </button>
         </div>
 
     </div>
 
-    <footer class="text-center mt-8 text-sm text-slate-500">
-        <p id="footer-copy">&copy; <span id="currentYear"></span> Vluchtelingenwerk [Organisatienaam]. Alle rechten voorbehouden.</p>
-         <p id="footer-note" class="text-xs mt-1">Dit is een voorbeeldpagina. Formulierinzendingen worden niet verwerkt tenzij Formspree correct is geconfigureerd.</p>
+    <footer class="text-center mt-12 mb-6 text-sm text-slate-500">
+        <p id="footer-copy">&copy; <span id="currentYear"></span> Vluchtelingenwerk Nederland. Alle rechten voorbehouden.</p>
     </footer>
 
-    <div id="privacyModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center" style="display: none; z-index: 100;">
-        <div class="relative mx-auto p-5 border w-11/12 md:w-1/2 lg:w-1/3 shadow-lg rounded-md bg-white">
+    <div id="privacyModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center" style="display: none; z-index: 100;">
+        <div class="relative mx-auto p-6 border-0 w-11/12 md:w-1/2 lg:w-2/5 shadow-2xl rounded-lg bg-white">
             <div class="mt-3 text-center">
-                <h3 id="modal-title" class="text-lg leading-6 font-medium text-gray-900">Privacybeleid (Voorbeeld)</h3>
-                <div id="modal-content" class="mt-2 px-7 py-3 text-sm text-gray-500 text-left">
-                    <p class="mb-2">Wij, Vluchtelingenwerk [Organisatienaam], hechten veel waarde aan de bescherming van uw persoonsgegevens. In dit privacybeleid willen we heldere en transparante informatie geven over hoe wij omgaan met persoonsgegevens.</p>
-                    <p class="mb-2"><strong>Welke gegevens verzamelen we?</strong> We verzamelen de gegevens die u invult in het contactformulier: uw naam (indien opgegeven), e-mailadres, telefoonnummer (indien opgegeven), de taal van uw vraag, de gewenste taal voor het antwoord, en de inhoud van uw vraag.</p>
-                    <p class="mb-2"><strong>Waarvoor gebruiken we uw gegevens?</strong> Uw gegevens worden uitsluitend gebruikt om contact met u op te nemen en uw vraag te beantwoorden. We delen uw gegevens niet met derden, tenzij dit nodig is om aan een wettelijke verplichting te voldoen.</p>
-                    <p class="mb-2"><strong>Hoe lang bewaren we uw gegevens?</strong> We bewaren uw gegevens niet langer dan strikt nodig is om de doelen te realiseren waarvoor uw gegevens worden verzameld, of zo lang als de wet ons verplicht.</p>
+                <h3 id="modal-title" class="text-xl leading-6 font-bold mb-4 text-brand-dark">Privacybeleid (Voorbeeld)</h3>
+                <div id="modal-content" class="mt-2 px-4 py-3 text-sm text-slate-600 text-left space-y-3 leading-relaxed">
+                    <p>Wij, Vluchtelingenwerk Nederland, hechten veel waarde aan de bescherming van uw persoonsgegevens. In dit privacybeleid willen we heldere en transparante informatie geven over hoe wij omgaan met persoonsgegevens.</p>
+                    <p><strong>Welke gegevens verzamelen we?</strong> We verzamelen de gegevens die u invult in het contactformulier: uw naam (indien opgegeven), e-mailadres, telefoonnummer (indien opgegeven), de taal van uw vraag, de gewenste taal voor het antwoord, en de inhoud van uw vraag.</p>
+                    <p><strong>Waarvoor gebruiken we uw gegevens?</strong> Uw gegevens worden uitsluitend gebruikt om contact met u op te nemen en uw vraag te beantwoorden. We delen uw gegevens niet met derden, tenzij dit nodig is om aan een wettelijke verplichting te voldoen.</p>
+                    <p><strong>Hoe lang bewaren we uw gegevens?</strong> We bewaren uw gegevens niet langer dan strikt nodig is om de doelen te realiseren waarvoor uw gegevens worden verzameld, of zo lang als de wet ons verplicht.</p>
                     <p>Voor meer informatie kunt u contact met ons opnemen.</p>
                 </div>
-                <div class="items-center px-4 py-3">
-                    <button id="closePrivacyModal" class="px-4 py-2 bg-sky-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <div class="items-center px-4 py-4 mt-4">
+                    <button id="closePrivacyModal" class="w-full px-6 py-2.5 btn-primary-accent text-base font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2" style="--tw-ring-color: var(--brand-orange-darker);">
                         Sluiten
                     </button>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        // JavaScript (translations and logic) remains largely the same as the previous version.
+        // The key changes are in CSS variables and their application in HTML for the new color scheme.
+        // Ensure all translations are up-to-date.
 
-        const translations = {
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        const footerOrgName = "Vluchtelingenwerk Nederland";
+        const currentYear = new Date().getFullYear();
+
+        const translations = { // Ensure all texts are translated, including fallbacks
             nl: {
-                pageTitle: "Stel uw Vraag - Vluchtelingenwerk",
-                mainTitle: "Stel uw Vraag",
+                pageTitle: "Deel uw Zorgen - Vluchtelingenwerk Nederland",
+                mainTitle: "Deel uw Zorgen",
                 subtitle: "Wij staan klaar om u te helpen. Vul het formulier hieronder in.",
+                mentalHealthInfo: "Uw welzijn is belangrijk voor ons. Deze ruimte is bedoeld om u te ondersteunen met mentale en emotionele uitdagingen. Deel alstublieft wat u bezighoudt.",
                 langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
                 langSelectHint: "Selecteer de taal waarin u het formulier wilt invullen en antwoord wilt ontvangen.",
                 labelName: "👤 Uw naam (optioneel)",
@@ -240,32 +307,36 @@
                 placeholderEmail: "voorbeeld@email.com",
                 labelPhone: "📞 Telefoonnummer (optioneel)",
                 placeholderPhone: "+31 6 12345678",
-                labelQuestionLang: "🗣️ Taal van uw vraag",
+                labelQuestionLang: "🗣️ Taal van uw bericht",
                 labelAnswerLang: "💬 Gewenste taal voor antwoord",
-                labelQuestion: "❓ Uw vraag",
-                placeholderQuestion: "Typ hier uw vraag zo duidelijk mogelijk...",
+                labelQuestion: "❓ Deel wat u bezighoudt. Voel u vrij om alles te uiten.",
+                placeholderQuestion: "Vertel ons alstublieft wat u dwarszit. Dit is een veilige plek om uw gedachten en gevoelens te delen...",
                 privacyInfo: "Door dit formulier in te dienen, gaat u akkoord met ons ",
                 privacyLinkText: "privacybeleid",
                 privacyInfoCont: ". Uw gegevens worden alleen gebruikt om uw vraag te beantwoorden.",
-                submitButtonText: "Verstuur mijn Vraag",
-                footerCopy: `&copy; ${new Date().getFullYear()} Vluchtelingenwerk [Organisatienaam]. Alle rechten voorbehouden.`,
+                submitButtonText: "Verstuur mijn Bericht",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. Alle rechten voorbehouden.`,
                 footerNote: "Dit is een voorbeeldpagina. Formulierinzendingen worden niet verwerkt tenzij Formspree correct is geconfigureerd.",
-                modalTitle: "Privacybeleid (Voorbeeld)",
+                modalTitle: "Privacybeleid",
                 modalCloseButton: "Sluiten",
-                alertError: "Vul alstublieft uw e-mailadres en vraag in.",
-                confirmationTitle: "Bedankt voor uw vraag!",
-                confirmationMessage: "Uw vraag is succesvol verzonden.",
+                alertErrorTitle: "Fout",
+                alertError: "Vul alstublieft uw e-mailadres en uw bericht in.",
+                submitErrorFallback: "Er is een fout opgetreden bij het verzenden. Probeer het later opnieuw.",
+                networkErrorFallback: "Er is een netwerkfout opgetreden. Controleer uw internetverbinding en probeer het opnieuw.",
+                confirmationTitle: "Bedankt voor uw bericht!",
+                confirmationMessage: "Uw bericht is succesvol verzonden.",
                 confirmationDetail: "We nemen zo spoedig mogelijk contact met u op via het opgegeven e-mailadres. Controleer ook uw spamfolder.",
                 whatNextTitle: "Wat nu?",
                 whatNextFaq: "Bekijk onze Veelgestelde Vragen (FAQ) pagina voor mogelijke antwoorden.",
                 whatNextInfo: "We streven ernaar binnen [X] werkdagen te antwoorden.",
-                newQuestionButton: "Stel nog een vraag",
+                newQuestionButton: "Nog iets delen",
                 submittingText: "Bezig met verzenden..."
             },
             en: {
-                pageTitle: "Ask your Question - Refugee Support",
-                mainTitle: "Ask your Question",
+                pageTitle: "Share your Concerns - Refugee Work Netherlands",
+                mainTitle: "Share your Concerns",
                 subtitle: "We are ready to help you. Please fill in the form below.",
+                mentalHealthInfo: "Your well-being is important to us. This space is intended to support you with mental and emotional challenges. Please share what's on your mind.",
                 langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك", 
                 langSelectHint: "Select the language in which you want to fill out the form and receive a reply.",
                 labelName: "👤 Your name (optional)",
@@ -274,32 +345,36 @@
                 placeholderEmail: "example@email.com",
                 labelPhone: "📞 Phone number (optional)",
                 placeholderPhone: "+31 6 12345678",
-                labelQuestionLang: "🗣️ Language of your question",
+                labelQuestionLang: "🗣️ Language of your message",
                 labelAnswerLang: "💬 Preferred language for reply",
-                labelQuestion: "❓ Your question",
-                placeholderQuestion: "Type your question here as clearly as possible...",
+                labelQuestion: "❓ Share what's on your mind. Feel free to express yourself.",
+                placeholderQuestion: "Please tell us what's troubling you. This is a safe space to share your thoughts and feelings...",
                 privacyInfo: "By submitting this form, you agree to our ",
                 privacyLinkText: "privacy policy",
                 privacyInfoCont: ". Your data will only be used to answer your question.",
-                submitButtonText: "Send my Question",
-                footerCopy: `&copy; ${new Date().getFullYear()} Refugee Support [Organization Name]. All rights reserved.`,
+                submitButtonText: "Send my Message",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. All rights reserved.`,
                 footerNote: "This is an example page. Form submissions are not processed unless Formspree is configured correctly.",
-                modalTitle: "Privacy Policy (Example)",
+                modalTitle: "Privacy Policy",
                 modalCloseButton: "Close",
-                alertError: "Please fill in your email address and question.",
-                confirmationTitle: "Thank you for your question!",
-                confirmationMessage: "Your question has been sent successfully.",
+                alertErrorTitle: "Error",
+                alertError: "Please fill in your email address and your message.",
+                submitErrorFallback: "An error occurred during submission. Please try again.",
+                networkErrorFallback: "A network error occurred. Please check your connection and try again.",
+                confirmationTitle: "Thank you for your message!",
+                confirmationMessage: "Your message has been sent successfully.",
                 confirmationDetail: "We will contact you as soon as possible via the email address provided. Please also check your spam folder.",
                 whatNextTitle: "What next?",
                 whatNextFaq: "Check our Frequently Asked Questions (FAQ) page for possible answers.",
                 whatNextInfo: "We aim to reply within [X] working days.",
-                newQuestionButton: "Ask another question",
+                newQuestionButton: "Share something else",
                 submittingText: "Submitting..."
             },
             ar: {
-                pageTitle: "اطرح سؤالك - دعم اللاجئين",
-                mainTitle: "اطرح سؤالك",
+                pageTitle: "شارك مخاوفك - منظمة عمل اللاجئين هولندا",
+                mainTitle: "شارك مخاوفك",
                 subtitle: "نحن مستعدون لمساعدتك. يرجى ملء النموذج أدناه.",
+                mentalHealthInfo: "رفاهيتك تهمنا. هذا المكان مخصص لدعمك في مواجهة التحديات النفسية والعاطفية. نرجو منك مشاركة ما يشغل بالك.",
                 langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك", 
                 langSelectHint: "اختر اللغة التي تريد بها ملء النموذج واستلام الرد.",
                 labelName: "👤 اسمك (اختياري)",
@@ -308,32 +383,36 @@
                 placeholderEmail: "example@email.com",
                 labelPhone: "📞 رقم الهاتف (اختياري)",
                 placeholderPhone: "+31 6 12345678",
-                labelQuestionLang: "🗣️ لغة سؤالك",
+                labelQuestionLang: "🗣️ لغة رسالتك",
                 labelAnswerLang: "💬 اللغة المفضلة للرد",
-                labelQuestion: "❓ سؤالك",
-                placeholderQuestion: "اكتب سؤالك هنا بوضوح قدر الإمكان...",
+                labelQuestion: "❓ شارك ما يجول في خاطرك. لا تتردد في التعبير عن نفسك.",
+                placeholderQuestion: "من فضلك أخبرنا ما يزعجك. هذا مكان آمن لمشاركة أفكارك ومشاعرك...",
                 privacyInfo: "بإرسال هذا النموذج، فإنك توافق على ",
                 privacyLinkText: "سياسة الخصوصية",
                 privacyInfoCont: " الخاصة بنا. سيتم استخدام بياناتك فقط للرد على سؤالك.",
-                submitButtonText: "أرسل سؤالي",
-                footerCopy: `&copy; ${new Date().getFullYear()} دعم اللاجئين [اسم المنظمة]. كل الحقوق محفوظة.`,
+                submitButtonText: "أرسل رسالتي",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. كل الحقوق محفوظة.`,
                 footerNote: "هذه صفحة مثال. لا تتم معالجة إرسالات النماذج ما لم يتم تكوين Formspree بشكل صحيح.",
-                modalTitle: "سياسة الخصوصية (مثال)",
+                modalTitle: "سياسة الخصوصية",
                 modalCloseButton: "إغلاق",
-                alertError: "يرجى ملء عنوان بريدك الإلكتروني وسؤالك.",
-                confirmationTitle: "شكرا لسؤالك!",
-                confirmationMessage: "تم إرسال سؤالك بنجاح.",
-                confirmationDetail: "سوف نتصل بك في أقرب وقت ممكن عبر عنوان البريد الإلكتر الإلكتروني المقدم. يرجى التحقق أيضا من مجلد الرسائل غير المرغوب فيها.",
+                alertErrorTitle: "خطأ",
+                alertError: "يرجى ملء عنوان بريدك الإلكتروني ورسالتك.",
+                submitErrorFallback: "حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.",
+                networkErrorFallback: "حدث خطأ في الشبكة. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.",
+                confirmationTitle: "شكرا لرسالتك!",
+                confirmationMessage: "تم إرسال رسالتك بنجاح.",
+                confirmationDetail: "سوف نتصل بك في أقرب وقت ممكن عبر عنوان البريد الإلكتروني المقدم. يرجى التحقق أيضا من مجلد الرسائل غير المرغوب فيها.",
                 whatNextTitle: "ماذا بعد؟",
                 whatNextFaq: "راجع صفحة الأسئلة الشائعة (FAQ) للحصول على إجابات محتملة.",
                 whatNextInfo: "نهدف إلى الرد في غضون [X] أيام عمل.",
-                newQuestionButton: "اطرح سؤالاً آخر",
+                newQuestionButton: "شارك شيئًا آخر", 
                 submittingText: "جارٍ الإرسال..."
             },
             ti: { 
-                pageTitle: "ሕቶኻ ሕተት - ደገፍ ስደተኛታት",
-                mainTitle: "ሕቶኻ ሕተት",
+                pageTitle: "ሻቕሎትኩም ኣካፍሉ - ደገፍ ስደተኛታት ኔዘርላንድ",
+                mainTitle: "ሻቕሎትኩም ኣካፍሉ",
                 subtitle: "ክንሕግዘኩም ድልዋት ኢና። ነዚ ታሕቲ ዘሎ ቅጥዒ ብኽብረትኩም ምልእዎ።",
+                mentalHealthInfo: "ደሓን ምዃንኩም ንዓና ኣገዳሲ እዩ። እዚ ቦታ እዚ፡ ንኣእምሮኣውን ስምዒታውን ብድሆታት ንምድጋፍ ዝዓለመ እዩ። ኣብ ልብኹም ዘሎ ነገር ብኽብረትኩም ኣካፍሉ።",
                 langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
                 langSelectHint: "ነቲ ቅጥዒ ክትመልእሉን መልሲ ክትቅበሉሉን እትደልይዎ ቋንቋ ምረጹ።",
                 labelName: "👤 ስምኩም (ዘይግድነት)",
@@ -342,83 +421,357 @@
                 placeholderEmail: "example@email.com",
                 labelPhone: "📞 ቁጽሪ ተሌፎን (ዘይግድነት)",
                 placeholderPhone: "+31 6 12345678",
-                labelQuestionLang: "🗣️ ቋንቋ ሕቶኹም",
+                labelQuestionLang: "🗣️ ቋንቋ መልእኽትኹም",
                 labelAnswerLang: "💬 ንመልሲ እትመርጽዎ ቋንቋ",
-                labelQuestion: "❓ ሕቶኹም",
-                placeholderQuestion: "ሕቶኹም ብንጹር ኣብዚ ጸሓፉ...",
+                labelQuestion: "❓ ኣብ ልብኹም ዘሎ ነገር ኣካፍሉ። ስምዒትኩም ንምግላጽ ነጻ ኩኑ።",
+                placeholderQuestion: "እንታይ ከም ዘሻቕለኩም በጃኹም ንገሩና። እዚ ሓሳብኩምን ስምዒትኩምን ንምክፋል ውሑስ ቦታ እዩ...",
                 privacyInfo: "ነዚ ቅጥዒ ብምቕራብኩም፡ ን ናትና ",
                 privacyLinkText: "መምርሒ ብሕታዊነት",
                 privacyInfoCont: " ትሰማምዑ ኣለኹም። տվյալները կօգտագործվեն միայն ձեր հարցին պատասխանելու համար.",
-                submitButtonText: "ሕቶይ ስደድ",
-                footerCopy: `&copy; ${new Date().getFullYear()} ደገፍ ስደተኛታት [ሽም ማሕበር]። ኩሉ መሰላት ዝተሓለወ እዩ።`,
+                submitButtonText: "መልእኽተይ ስደድ",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. ኩሉ መሰላት ዝተሓለወ እዩ።`,
                 footerNote: "እዚኣ ገጽ ኣብነት እያ። ቅጥዒ ምቕራባት ኣይሰርሕን እዩ፡ Formspree ብትኽክል እንተዘይተዋቐረ።",
-                modalTitle: "መምርሒ ብሕታዊነት (ኣብነት)",
+                modalTitle: "መምርሒ ብሕታዊነት",
                 modalCloseButton: "ዕጾ",
-                alertError: "በጃኹም ኢሜይል ኣድራሻኹምን ሕቶኹምን ምልኡ።",
-                confirmationTitle: "ንሕቶኹም የቀንየልና!",
-                confirmationMessage: "ሕቶኹም ብዓወት ተላኢኹ ኣሎ።",
-                confirmationDetail: "ብዝተኻእለና መጠን ቀልጢፍና በቲ ዝሃብኩምና ኢሜይል ኣድራሻ ክንረኽበኩም። በጃኹም፡ ነቲ ናይ ስፓም ፎልደርኩም እውን መርምርዎ።",
+                alertErrorTitle: "ጌጋ",
+                alertError: "በጃኹም ኢሜይል ኣድራሻኹምን መልእኽትኹምን ምልኡ።",
+                submitErrorFallback: "ኣብ እዋን ምልኣኽ ጌጋ ኣጋጢሙ። በጃኹም እንደገና ፈትኑ።",
+                networkErrorFallback: "ናይ መርበብ ጌጋ ኣጋጢሙ። በጃኹም መራኸቢኹም መርምሩ እሞ እንደገና ፈትኑ።",
+                confirmationTitle: "ንመልእኽትኹም የቀንየልና!",
+                confirmationMessage: "መልእኽትኹም ብዓወት ተላኢኹ ኣሎ።",
+                confirmationDetail: "ብዝተኻእለና መጠን ቀልጢፍና በቲ ዝሃብኩምና ኢሜይል ኣድራሻ ክንረኽበኩም። በጃኹም፡ ነቲ ናይ ስፓም ፎልደርኩም እውን መрምርዎ።",
                 whatNextTitle: "እንታይ ቀጺሉ?",
-                whatNextFaq: "ንዝኾኑ መልስታት፡ ነቲ ናይ ብዙሕ ጊዜ ዝሕተቱ ሕቶታት (FAQ) ገጽና መርምርዎ።",
+                whatNextFaq: "ንዝኾኑ መልስታት፡ ነቲ ናይ ብዙሕ ጊዜ ዝሕተቱ ሕቶታት (FAQ) ገጽና መрምርዎ።",
                 whatNextInfo: "ኣብ ውሽጢ [X] ናይ ስራሕ መዓልታት ክንምልሰልኩም ንጽዕር ኢና።",
-                newQuestionButton: "ካልእ ሕቶ ሕተት",
+                newQuestionButton: "ካልእ ነገር ኣካፍሉ",
                 submittingText: "ይስደድ ኣሎ..."
+            },
+            // Ensure other languages (tr, fa, so, ku, ru, uk) also have these new fallback keys translated
+            tr: { 
+                pageTitle: "Endişelerinizi Paylaşın - Hollanda Mültecilere Yardım Kuruluşu",
+                mainTitle: "Endişelerinizi Paylaşın",
+                subtitle: "Size yardım etmeye hazırız. Lütfen aşağıdaki formu doldurun.",
+                mentalHealthInfo: "Sağlığınız bizim için önemlidir. Bu alan, zihinsel ve duygusal zorluklarla başa çıkmanıza destek olmak amacıyla oluşturulmuştur. Lütfen aklınızdakileri paylaşın.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "Formu doldurmak ve yanıt almak istediğiniz dili seçin.",
+                labelName: "👤 Adınız (isteğe bağlı)",
+                placeholderName: "Adınızı buraya girin",
+                labelEmail: "✉️ E-posta adresiniz (yanıt için)",
+                placeholderEmail: "ornek@eposta.com",
+                labelPhone: "📞 Telefon numarası (isteğe bağlı)",
+                placeholderPhone: "+90 5xxxxxxxxx",
+                labelQuestionLang: "🗣️ Mesajınızın dili",
+                labelAnswerLang: "💬 Yanıt için tercih edilen dil",
+                labelQuestion: "❓ Aklınızdan geçenleri paylaşın. Kendinizi özgürce ifade edin.",
+                placeholderQuestion: "Lütfen sizi neyin rahatsız ettiğini bize anlatın. Burası düşüncelerinizi ve duygularınızı paylaşabileceğiniz güvenli bir alandır...",
+                privacyInfo: "Bu formu göndererek, ",
+                privacyLinkText: "gizlilik politikamızı",
+                privacyInfoCont: " kabul etmiş olursunuz. Verileriniz yalnızca sorunuzu yanıtlamak için kullanılacaktır.",
+                submitButtonText: "Mesajımı Gönder",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. Tüm hakları saklıdır.`,
+                footerNote: "Bu bir örnek sayfadır. Formspree doğru yapılandırılmadığı sürece form gönderimleri işlenmez.",
+                modalTitle: "Gizlilik Politikası",
+                modalCloseButton: "Kapat",
+                alertErrorTitle: "Hata",
+                alertError: "Lütfen e-posta adresinizi ve mesajınızı girin.",
+                submitErrorFallback: "Gönderim sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+                networkErrorFallback: "Bir ağ hatası oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
+                confirmationTitle: "Mesajınız için teşekkürler!",
+                confirmationMessage: "Mesajınız başarıyla gönderildi.",
+                confirmationDetail: "Belirtilen e-posta adresi üzerinden en kısa sürede sizinle iletişime geçeceğiz. Lütfen spam klasörünüzü de kontrol edin.",
+                whatNextTitle: "Sırada ne var?",
+                whatNextFaq: "Olası yanıtlar için Sıkça Sorulan Sorular (SSS) sayfamıza göz atın.",
+                whatNextInfo: "[X] iş günü içinde yanıt vermeyi hedefliyoruz.",
+                newQuestionButton: "Başka bir şey paylaşın",
+                submittingText: "Gönderiliyor..."
+            },
+            fa: { 
+                pageTitle: "نگرانی های خود را به اشتراک بگذارید - سازمان کمک به پناهندگان هلند",
+                mainTitle: "نگرانی های خود را به اشتراک بگذارید",
+                subtitle: "ما آماده کمک به شما هستیم. لطفا فرم زیر را پر کنید.",
+                mentalHealthInfo: "سلامتی شما برای ما مهم است. این فضا برای حمایت از شما در چالش های روحی و روانی در نظر گرفته شده است. لطفاً آنچه در ذهن دارید را به اشتراک بگذارید.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "زبانی را که می خواهید فرم را با آن پر کنید و پاسخ دریافت کنید، انتخاب کنید.",
+                labelName: "👤 نام شما (اختیاری)",
+                placeholderName: "نام خود را اینجا وارد کنید",
+                labelEmail: "✉️ آدرس ایمیل شما (برای پاسخ)",
+                placeholderEmail: "example@email.com",
+                labelPhone: "📞 شماره تلفن (اختیاری)",
+                placeholderPhone: "+98 9xxxxxxxxx",
+                labelQuestionLang: "🗣️ زبان پیام شما",
+                labelAnswerLang: "💬 زبان ترجیحی برای پاسخ",
+                labelQuestion: "❓ آنچه در ذهن دارید را به اشتراک بگذارید. احساسات خود را آزادانه بیان کنید.",
+                placeholderQuestion: "لطفاً به ما بگویید چه چیزی شما را آزار می دهد. اینجا یک فضای امن برای به اشتراک گذاشتن افکار و احساسات شماست...",
+                privacyInfo: "با ارسال این فرم، شما با ",
+                privacyLinkText: "سیاست حفظ حریم خصوصی",
+                privacyInfoCont: " ما موافقت می کنید. اطلاعات شما فقط برای پاسخ به سوال شما استفاده خواهد شد.",
+                submitButtonText: "ارسال پیام من",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. تمام حقوق محفوظ است.`,
+                footerNote: "این یک صفحه نمونه است. ارسال فرم ها پردازش نمی شود مگر اینکه Formspree به درستی پیکربندی شده باشد.",
+                modalTitle: "سیاست حفظ حریم خصوصی",
+                modalCloseButton: "بستن",
+                alertErrorTitle: "خطا",
+                alertError: "لطفا آدرس ایمیل و پیام خود را وارد کنید.",
+                submitErrorFallback: "هنگام ارسال خطایی روی داد. لطفا دوباره تلاش کنید.",
+                networkErrorFallback: "خطای شبکه روی داد. لطفاً اتصال خود را بررسی کرده و دوباره امتحان کنید.",
+                confirmationTitle: "از پیام شما متشکریم!",
+                confirmationMessage: "پیام شما با موفقیت ارسال شد.",
+                confirmationDetail: "ما در اسرع وقت از طریق آدرس ایمیل ارائه شده با شما تماس خواهیم گرفت. لطفاً پوشه هرزنامه خود را نیز بررسی کنید.",
+                whatNextTitle: "بعدش چی؟",
+                whatNextFaq: "برای پاسخ های احتمالی، صفحه سوالات متداول (FAQ) ما را بررسی کنید.",
+                whatNextInfo: "ما در تلاشیم تا ظرف [X] روز کاری پاسخ دهیم.",
+                newQuestionButton: "چیز دیگری به اشتراک بگذارید",
+                submittingText: "در حال ارسال..."
+            },
+            so: { 
+                pageTitle: "La Wadaag Walaacyadaada - Hay'adda Caawinta Qaxootiga ee Holland",
+                mainTitle: "La Wadaag Walaacyadaada",
+                subtitle: "Diyaar ayaan u nahay inaan ku caawino. Fadlan buuxi foomka hoose.",
+                mentalHealthInfo: "Caafimaadkaagu waa muhiim noo. Meeshan waxaa loogu talagalay in lagugu taageero caqabadaha maskaxda iyo dareenka. Fadlan nala wadaag waxa maskaxdaada ku jira.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "Dooro luqadda aad rabto inaad ku buuxiso foomka oo aad jawaab ku hesho.",
+                labelName: "👤 Magacaaga (ikhtiyaari)",
+                placeholderName: "Halkan ku qor magacaaga",
+                labelEmail: "✉️ Ciwaanka emailkaaga (jawaabta)",
+                placeholderEmail: "tusaale@email.com",
+                labelPhone: "📞 Lambarka taleefanka (ikhtiyaari)",
+                placeholderPhone: "+252 6xxxxxxx",
+                labelQuestionLang: "🗣️ Luqadda farriintaada",
+                labelAnswerLang: "💬 Luqadda aad doorbidayso jawaabta",
+                labelQuestion: "❓ La wadaag waxa maskaxdaada ku jira. Si xor ah u muuji dareenkaaga.",
+                placeholderQuestion: "Fadlan noo sheeg waxa ku dhibaya. Kani waa meel aamin ah oo aad kula wadaagi karto fikradahaaga iyo dareenkaaga...",
+                privacyInfo: "Markaad soo gudbiso foomkan, waxaad ogolaatay ",
+                privacyLinkText: "siyaasaddayada khaaska ah",
+                privacyInfoCont: ". Xogtaada waxaa kaliya loo isticmaali doonaa in lagaaga jawaabo su'aashaada.",
+                submitButtonText: "Dir Farriintayda",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. Xuquuqda oo dhan way xifdisan tahay.`,
+                footerNote: "Kani waa bog tusaale ah. Gudbinta foomamka lama proceso ilaa Formspree si sax ah loo habeeyo.",
+                modalTitle: "Siyaasadda Khaaska ah",
+                modalCloseButton: "Xir",
+                alertErrorTitle: "Khalad",
+                alertError: "Fadlan buuxi ciwaanka emailkaaga iyo farriintaada.",
+                submitErrorFallback: "Khalad ayaa dhacay intii la gudbinayay. Fadlan isku day mar kale.",
+                networkErrorFallback: "Khalad shabakad ayaa dhacay. Fadlan hubi xiriirkaaga oo isku day mar kale.",
+                confirmationTitle: "Waad ku mahadsan tahay farriintaada!",
+                confirmationMessage: "Farriintaada si guul leh ayaa loo diray.",
+                confirmationDetail: "Waxaan kula soo xiriiri doonaa sida ugu dhaqsaha badan adoo isticmaalaya ciwaanka emailka ee aad bixisay. Fadlan sidoo kale hubi galkaaga spamka.",
+                whatNextTitle: "Maxaa xiga?",
+                whatNextFaq: "Hubi boggayaga Su'aalaha Inta Badan La Isweydiiyo (FAQ) si aad u hesho jawaabo macquul ah.",
+                whatNextInfo: "Waxaan hiigsaneynaa inaan kuugu soo jawaabno [X] maalmood oo shaqo gudahood.",
+                newQuestionButton: "Wadaag wax kale",
+                submittingText: "Waa la dirayaa..."
+            },
+            ku: { 
+                pageTitle: "Xemên Xwe Parve Bikin - Alîkariya Penaberan a Hollandayê",
+                mainTitle: "Xemên Xwe Parve Bikin",
+                subtitle: "Em amade ne ku alîkariya we bikin. Ji kerema xwe forma jêrîn dagirin.",
+                mentalHealthInfo: "Başbûna we ji bo me girîng e. Ev cîh ji bo piştgirîkirina we di pirsgirêkên derûnî û hestyarî de ye. Ji kerema xwe tiştên ku di hişê we de ne parve bikin.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "Zimanê ku hûn dixwazin formê pê dagirin û bersivê bistînin hilbijêrin.",
+                labelName: "👤 Navê we (ne mecbûrî)",
+                placeholderName: "Navê xwe li vir binivîse",
+                labelEmail: "✉️ Navnîşana e-nameya we (ji bo bersivê)",
+                placeholderEmail: "mînak@email.com",
+                labelPhone: "📞 Hejmara têlefonê (ne mecbûrî)",
+                placeholderPhone: "+90 5xxxxxxxxx",
+                labelQuestionLang: "🗣️ Zimanê peyama we",
+                labelAnswerLang: "💬 Zimanê bijartî ji bo bersivê",
+                labelQuestion: "❓ Tiştên ku di hişê we de ne parve bikin. Hestên xwe bi azadî îfade bikin.",
+                placeholderQuestion: "Ji kerema xwe ji me re bêjin ka çi we aciz dike. Ev cîhek ewle ye ku hûn raman û hestên xwe parve bikin...",
+                privacyInfo: "Bi şandina vê formê, hûn bi ",
+                privacyLinkText: "polîtîkaya nepenîtiyê",
+                privacyInfoCont: " ya me razî dibin. Daneyên we dê tenê ji bo bersivdana pirsa we werin bikar anîn.",
+                submitButtonText: "Peyama Min Bişîne",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. Hemû maf parastî ne.`,
+                footerNote: "Ev rûpelek mînak e. Şandina forman nayê pêvajoyê kirin heya ku Formspree rast neyê vesazkirin.",
+                modalTitle: "Polîtîkaya Nepenîtiyê",
+                modalCloseButton: "Bigire",
+                alertErrorTitle: "Şaşî",
+                alertError: "Ji kerema xwe navnîşana e-nameya xwe û peyama xwe binivîsin.",
+                submitErrorFallback: "Di dema şandinê de xeletiyek çêbû. Ji kerema xwe dîsa biceribîne.",
+                networkErrorFallback: "Xeletiyek torê çêbû. Ji kerema xwe girêdana xwe kontrol bikin û dîsa biceribînin.",
+                confirmationTitle: "Spas ji bo peyama we!",
+                confirmationMessage: "Peyama we bi serkeftî hate şandin.",
+                confirmationDetail: "Em ê di zûtirîn dem de bi navnîşana e-nameya ku we daye bi we re têkilî daynin. Ji kerema xwe peldanka spamê ya xwe jî kontrol bikin.",
+                whatNextTitle: "Piştre çi?",
+                whatNextFaq: "Ji bo bersivên muhtemel, rûpela Pirsên Pir tên Pirsîn (FAQ) ya me kontrol bikin.",
+                whatNextInfo: "Em armanc dikin ku di nav [X] rojên kar de bersiv bidin.",
+                newQuestionButton: "Tiştekî din parve bike",
+                submittingText: "Tê şandin..."
+            },
+            ru: { 
+                pageTitle: "Поделитесь своими переживаниями - Помощь беженцам в Нидерландах",
+                mainTitle: "Поделитесь своими переживаниями",
+                subtitle: "Мы готовы вам помочь. Пожалуйста, заполните форму ниже.",
+                mentalHealthInfo: "Ваше благополучие важно для нас. Это пространство предназначено для поддержки вас в психических и эмоциональных проблемах. Пожалуйста, поделитесь тем, что у вас на уме.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "Выберите язык, на котором вы хотите заполнить форму и получить ответ.",
+                labelName: "👤 Ваше имя (необязательно)",
+                placeholderName: "Введите ваше имя здесь",
+                labelEmail: "✉️ Ваш адрес электронной почты (для ответа)",
+                placeholderEmail: "example@email.com",
+                labelPhone: "📞 Номер телефона (необязательно)",
+                placeholderPhone: "+7 9xxxxxxxxx",
+                labelQuestionLang: "🗣️ Язык вашего сообщения",
+                labelAnswerLang: "💬 Предпочитаемый язык для ответа",
+                labelQuestion: "❓ Поделитесь тем, что у вас на уме. Не стесняйтесь выражать свои чувства.",
+                placeholderQuestion: "Пожалуйста, расскажите нам, что вас беспокоит. Это безопасное место, чтобы поделиться своими мыслями и чувствами...",
+                privacyInfo: "Отправляя эту форму, вы соглашаетесь с нашей ",
+                privacyLinkText: "политикой конфиденциальности",
+                privacyInfoCont: ". Ваши данные будут использованы только для ответа на ваш вопрос.",
+                submitButtonText: "Отправить мое сообщение",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. Все права защищены.`,
+                footerNote: "Это пример страницы. Отправка форм не будет обработана, если Formspree не настроен правильно.",
+                modalTitle: "Политика конфиденциальности",
+                modalCloseButton: "Закрыть",
+                alertErrorTitle: "Ошибка",
+                alertError: "Пожалуйста, укажите ваш адрес электронной почты и ваше сообщение.",
+                submitErrorFallback: "Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз.",
+                networkErrorFallback: "Произошла ошибка сети. Пожалуйста, проверьте ваше соединение и попробуйте еще раз.",
+                confirmationTitle: "Спасибо за ваше сообщение!",
+                confirmationMessage: "Ваше сообщение успешно отправлено.",
+                confirmationDetail: "Мы свяжемся с вами как можно скорее по указанному адресу электронной почты. Пожалуйста, также проверьте папку со спамом.",
+                whatNextTitle: "Что дальше?",
+                whatNextFaq: "Ознакомьтесь с нашей страницей Часто задаваемых вопросов (FAQ) для возможных ответов.",
+                whatNextInfo: "Мы стараемся отвечать в течение [X] рабочих дней.",
+                newQuestionButton: "Поделиться еще чем-то",
+                submittingText: "Отправка..."
+            },
+            uk: { 
+                pageTitle: "Поділіться своїми переживаннями - Допомога біженцям у Нідерландах",
+                mainTitle: "Поділіться своїми переживаннями",
+                subtitle: "Ми готові вам допомогти. Будь ласка, заповніть форму нижче.",
+                mentalHealthInfo: "Ваше благополуччя важливе для нас. Цей простір призначений для підтримки вас у психічних та емоційних проблемах. Будь ласка, поділіться тим, що у вас на думці.",
+                langSelectLabel: "🌍 Kies uw taal / Select your language / اختر لغتك",
+                langSelectHint: "Виберіть мову, якою ви хочете заповнити форму та отримати відповідь.",
+                labelName: "👤 Ваше ім'я (необов'язково)",
+                placeholderName: "Введіть ваше ім'я тут",
+                labelEmail: "✉️ Ваша адреса електронної пошти (для відповіді)",
+                placeholderEmail: "example@email.com",
+                labelPhone: "📞 Номер телефону (необов'язково)",
+                placeholderPhone: "+380 xx xxx xx xx",
+                labelQuestionLang: "🗣️ Мова вашого повідомлення",
+                labelAnswerLang: "💬 Бажана мова для відповіді",
+                labelQuestion: "❓ Поділіться тим, що у вас на думці. Не соромтеся висловлювати свої почуття.",
+                placeholderQuestion: "Будь ласка, розкажіть нам, що вас турбує. Це безпечне місце, щоб поділитися своїми думками та почуттями...",
+                privacyInfo: "Надсилаючи цю форму, ви погоджуєтеся з нашою ",
+                privacyLinkText: "політикою конфіденційності",
+                privacyInfoCont: ". Ваші дані будуть використані лише для відповіді на ваше запитання.",
+                submitButtonText: "Надіслати моє повідомлення",
+                footerCopy: `&copy; ${currentYear} ${footerOrgName}. Всі права захищені.`,
+                footerNote: "Це прикладова сторінка. Надсилання форм не буде оброблено, якщо Formspree не налаштовано належним чином.",
+                modalTitle: "Політика конфіденційності",
+                modalCloseButton: "Закрити",
+                alertErrorTitle: "Помилка",
+                alertError: "Будь ласка, вкажіть вашу адресу електронної пошти та ваше повідомлення.",
+                submitErrorFallback: "Сталася помилка під час відправлення. Будь ласка, спробуйте ще раз.",
+                networkErrorFallback: "Сталася помилка мережі. Будь ласка, перевірте з'єднання та спробуйте ще раз.",
+                confirmationTitle: "Дякуємо за ваше повідомлення!",
+                confirmationMessage: "Ваше повідомлення успішно надіслано.",
+                confirmationDetail: "Ми зв'яжемося з вами якомога швидше за вказаною адресою електронної пошти. Будь ласка, також перевірте папку зі спамом.",
+                whatNextTitle: "Що далі?",
+                whatNextFaq: "Перегляньте нашу сторінку Поширених запитань (FAQ) для можливих відповідей.",
+                whatNextInfo: "Ми прагнемо відповідати протягом [X] робочих днів.",
+                newQuestionButton: "Поділитися ще чимось",
+                submittingText: "Надсилання..."
             }
         };
+        
+        function getTranslation(lang, key, fallbackLang = 'en') {
+            if (translations[lang] && typeof translations[lang][key] !== 'undefined') {
+                return translations[lang][key];
+            }
+            if (translations[fallbackLang] && typeof translations[fallbackLang][key] !== 'undefined') {
+                console.warn(`Translation key "${key}" not found for language "${lang}". Using fallback "${fallbackLang}".`);
+                return translations[fallbackLang][key];
+            }
+            console.error(`Translation key "${key}" not found for language "${lang}" or fallback "${fallbackLang}".`);
+            return `[[${key}]]`;
+        }
 
         function changeLanguage(lang) {
             if (!translations[lang]) {
-                console.warn(`Translations for language "${lang}" not found.`);
-                return;
+                console.warn(`Translations for language "${lang}" not found. Defaulting to 'nl'.`);
+                lang = 'nl'; 
             }
-            const t = translations[lang];
             
-            document.title = t.pageTitle;
-            document.getElementById('main-title').textContent = t.mainTitle;
-            document.getElementById('subtitle').textContent = t.subtitle;
-            document.getElementById('lang-select-hint').textContent = t.langSelectHint;
+            document.title = getTranslation(lang, 'pageTitle');
+            document.getElementById('main-title').textContent = getTranslation(lang, 'mainTitle');
+            document.getElementById('subtitle').textContent = getTranslation(lang, 'subtitle');
+            document.getElementById('mental-health-info').textContent = getTranslation(lang, 'mentalHealthInfo');
+            document.getElementById('lang-select-hint').textContent = getTranslation(lang, 'langSelectHint');
             
-            document.getElementById('label-name').innerHTML = `<span class="form-icon">👤</span> ${t.labelName.substring(t.labelName.indexOf(' ') + 1)}`; 
-            document.getElementById('name').placeholder = t.placeholderName;
+            const labelNameText = getTranslation(lang, 'labelName');
+            document.getElementById('label-name').innerHTML = `<span class="form-icon">👤</span> ${labelNameText.includes(' ') ? labelNameText.substring(labelNameText.indexOf(' ') + 1) : labelNameText}`;
+            document.getElementById('name').placeholder = getTranslation(lang, 'placeholderName');
             
-            document.getElementById('label-email').innerHTML = `<span class="form-icon">✉️</span> ${t.labelEmail.substring(t.labelEmail.indexOf(' ') + 1)}`;
-            document.getElementById('email').placeholder = t.placeholderEmail;
+            const labelEmailText = getTranslation(lang, 'labelEmail');
+            document.getElementById('label-email').innerHTML = `<span class="form-icon">✉️</span> ${labelEmailText.includes(' ') ? labelEmailText.substring(labelEmailText.indexOf(' ') + 1) : labelEmailText}`;
+            document.getElementById('email').placeholder = getTranslation(lang, 'placeholderEmail');
 
-            document.getElementById('label-phone').innerHTML = `<span class="form-icon">📞</span> ${t.labelPhone.substring(t.labelPhone.indexOf(' ') + 1)}`;
-            document.getElementById('phone').placeholder = t.placeholderPhone;
+            const labelPhoneText = getTranslation(lang, 'labelPhone');
+            document.getElementById('label-phone').innerHTML = `<span class="form-icon">📞</span> ${labelPhoneText.includes(' ') ? labelPhoneText.substring(labelPhoneText.indexOf(' ') + 1) : labelPhoneText}`;
+            document.getElementById('phone').placeholder = getTranslation(lang, 'placeholderPhone');
 
-            document.getElementById('label-question-lang').innerHTML = `<span class="form-icon">🗣️</span> ${t.labelQuestionLang.substring(t.labelQuestionLang.indexOf(' ') + 1)}`;
-            document.getElementById('label-answer-lang').innerHTML = `<span class="form-icon">💬</span> ${t.labelAnswerLang.substring(t.labelAnswerLang.indexOf(' ') + 1)}`;
+            const labelQuestionLangText = getTranslation(lang, 'labelQuestionLang');
+            document.getElementById('label-question-lang').innerHTML = `<span class="form-icon">🗣️</span> ${labelQuestionLangText.includes(' ') ? labelQuestionLangText.substring(labelQuestionLangText.indexOf(' ') + 1) : labelQuestionLangText}`;
             
-            document.getElementById('label-question').innerHTML = `<span class="form-icon">❓</span> ${t.labelQuestion.substring(t.labelQuestion.indexOf(' ') + 1)}`;
-            document.getElementById('question').placeholder = t.placeholderQuestion;
+            const labelAnswerLangText = getTranslation(lang, 'labelAnswerLang');
+            document.getElementById('label-answer-lang').innerHTML = `<span class="form-icon">💬</span> ${labelAnswerLangText.includes(' ') ? labelAnswerLangText.substring(labelAnswerLangText.indexOf(' ') + 1) : labelAnswerLangText}`;
+            
+            const labelQuestionText = getTranslation(lang, 'labelQuestion');
+            document.getElementById('label-question').innerHTML = `<span class="form-icon">❓</span> ${labelQuestionText.includes(' ') ? labelQuestionText.substring(labelQuestionText.indexOf(' ') + 1) : labelQuestionText}`;
+            document.getElementById('question').placeholder = getTranslation(lang, 'placeholderQuestion');
 
-            const privacyLink = document.getElementById('privacy-link-text');
             const privacyInfoP = document.getElementById('privacy-info');
-            privacyLink.textContent = t.privacyLinkText;
-            privacyInfoP.innerHTML = `${t.privacyInfo}<a href="#" id="privacy-link-text" class="text-sky-600 hover:underline" onclick="showPrivacyPolicy(event)">${t.privacyLinkText}</a>${t.privacyInfoCont}`;
+            privacyInfoP.innerHTML = `${getTranslation(lang, 'privacyInfo')}<a href="#" id="privacy-link-text" class="hover:underline text-brand-accent" onclick="showPrivacyPolicy(event)">${getTranslation(lang, 'privacyLinkText')}</a>${getTranslation(lang, 'privacyInfoCont')}`;
 
-            document.getElementById('submit-button-text').textContent = t.submitButtonText;
+            document.getElementById('submit-button-text').textContent = getTranslation(lang, 'submitButtonText');
             
-            document.getElementById('footer-copy').innerHTML = t.footerCopy;
-            document.getElementById('footer-note').textContent = t.footerNote;
+            document.getElementById('footer-copy').innerHTML = getTranslation(lang, 'footerCopy');
+            document.getElementById('footer-note').textContent = getTranslation(lang, 'footerNote');
 
-            document.getElementById('modal-title').textContent = t.modalTitle;
-            document.getElementById('closePrivacyModal').textContent = t.modalCloseButton;
+            document.getElementById('modal-title').textContent = getTranslation(lang, 'modalTitle');
+            document.getElementById('closePrivacyModal').textContent = getTranslation(lang, 'modalCloseButton');
 
-            document.getElementById('confirmation-title').textContent = t.confirmationTitle;
-            document.getElementById('confirmation-message').textContent = t.confirmationMessage;
-            document.getElementById('confirmation-detail').textContent = t.confirmationDetail;
-            document.getElementById('what-next-title').textContent = t.whatNextTitle;
-            const faqLinkText = t.whatNextFaq.includes("FAQ") ? "FAQ" : (t.whatNextFaq.includes("الأسئلة الشائعة") ? "الأسئلة الشائعة" : "ሕቶታት"); // Basic detection
-            document.getElementById('what-next-faq').innerHTML = `${t.whatNextFaq.substring(0, t.whatNextFaq.indexOf(faqLinkText))}<a href="#" class="text-sky-600 hover:underline" onclick="alert('Link naar FAQ (simulatie)')">${faqLinkText}</a>${t.whatNextFaq.substring(t.whatNextFaq.indexOf(faqLinkText) + faqLinkText.length)}`;
-            document.getElementById('what-next-info').textContent = t.whatNextInfo;
-            document.getElementById('new-question-button').textContent = t.newQuestionButton;
+            document.getElementById('confirmation-title').textContent = getTranslation(lang, 'confirmationTitle');
+            document.getElementById('confirmation-message').textContent = getTranslation(lang, 'confirmationMessage');
+            document.getElementById('confirmation-detail').textContent = getTranslation(lang, 'confirmationDetail');
+            document.getElementById('what-next-title').textContent = getTranslation(lang, 'whatNextTitle');
+            
+            const faqLinkElement = document.getElementById('what-next-faq').querySelector('a');
+            const originalFAQOnClick = faqLinkElement ? faqLinkElement.onclick : () => customAlert(getTranslation(lang,'whatNextFaq', 'en'), 'Info');
+
+            const translatedFaqFullText = getTranslation(lang, 'whatNextFaq');
+            const faqKeywords = ["FAQ", "Veelgestelde Vragen", "الأسئلة الشائعة", "ብዙሕ ጊዜ ዝሕተቱ ሕቶታት", "Sıkça Sorulan Sorular", "سوالات متداول", "Su'aalaha Inta Badan La Isweydiiyo", "Pirsên Pir tên Pirsîn", "Часто задаваемые вопросы", "Поширені запитання"];
+            let newFaqHTML = translatedFaqFullText;
+            let linkTextFound = "FAQ"; 
+
+            for (const keyword of faqKeywords) {
+                const regex = new RegExp(`^(.*?)(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(.*)$`, 'i'); // Escape keyword for regex
+                const faqMatch = translatedFaqFullText.match(regex);
+                if (faqMatch) {
+                    linkTextFound = faqMatch[2];
+                    newFaqHTML = `${faqMatch[1]}<a href="#" class="font-medium hover:underline text-brand-accent">${linkTextFound}</a>${faqMatch[3]}`;
+                    break; 
+                }
+            }
+             if (newFaqHTML === translatedFaqFullText && translatedFaqFullText.includes(linkTextFound)) { 
+                newFaqHTML = translatedFaqFullText.replace(new RegExp(linkTextFound.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), `<a href="#" class="font-medium hover:underline text-brand-accent">${linkTextFound}</a>`);
+            }
+
+            document.getElementById('what-next-faq').innerHTML = newFaqHTML;
+            const newFaqLink = document.getElementById('what-next-faq').querySelector('a');
+            if (newFaqLink) newFaqLink.onclick = originalFAQOnClick;
+
+
+            document.getElementById('what-next-info').textContent = getTranslation(lang, 'whatNextInfo');
+            document.getElementById('new-question-button').textContent = getTranslation(lang, 'newQuestionButton');
 
             document.documentElement.lang = lang;
-            document.getElementById('form_page_language').value = lang; // Update hidden field for Formspree
+            document.getElementById('form_page_language').value = lang; 
 
-            if (lang === 'ar') {
+            if (lang === 'ar' || lang === 'fa' || lang === 'ku') { 
                 document.documentElement.dir = 'rtl';
             } else {
                 document.documentElement.dir = 'ltr';
@@ -443,23 +796,61 @@
         const submitButtonArrow = document.getElementById('submit-button-arrow');
         const submitSpinner = document.getElementById('submit-spinner');
 
+        const alertModal = document.createElement('div');
+        alertModal.id = 'alertModal';
+        alertModal.className = 'fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center';
+        alertModal.style.display = 'none';
+        alertModal.style.zIndex = '200'; 
+        alertModal.innerHTML = `
+            <div class="relative mx-auto p-6 border-0 w-11/12 md:w-1/3 max-w-md shadow-2xl rounded-lg bg-white">
+                <div class="mt-3 text-center">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                        <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg leading-6 font-medium text-brand-dark" id="alertModalTitle">Fout</h3>
+                    <div class="mt-2 px-4 py-3">
+                        <p class="text-sm text-slate-600" id="alertModalMessage"></p>
+                    </div>
+                    <div class="items-center px-4 py-3 mt-2">
+                        <button id="closeAlertModal" class="w-full px-6 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(alertModal);
+
+        const closeAlertModalButton = document.getElementById('closeAlertModal');
+        closeAlertModalButton.addEventListener('click', () => {
+            alertModal.style.display = 'none';
+        });
+
+        function customAlert(message, title) {
+            const currentLang = document.documentElement.lang || 'nl';
+            const alertTitle = title || getTranslation(currentLang, 'alertErrorTitle', 'en');
+            document.getElementById('alertModalTitle').textContent = alertTitle;
+            document.getElementById('alertModalMessage').textContent = message;
+            alertModal.style.display = 'flex';
+        }
 
         questionForm.addEventListener('submit', async function(event) {
             event.preventDefault(); 
             const currentLang = document.documentElement.lang || 'nl'; 
-            const t = translations[currentLang];
-
+            
             const email = document.getElementById('email').value;
-            const questionText = document.getElementById('question').value; // Renamed to avoid conflict
+            const questionText = document.getElementById('question').value; 
 
             if (!email || !questionText) {
-                alert(t.alertError);
+                customAlert(getTranslation(currentLang, 'alertError'), getTranslation(currentLang, 'alertErrorTitle'));
                 return;
             }
 
             submitButton.disabled = true;
             submitSpinner.style.display = 'inline-block';
-            submitButtonText.textContent = t.submittingText;
+            submitButtonText.textContent = getTranslation(currentLang, 'submittingText');
             submitButtonArrow.style.display = 'none';
             
             const formData = new FormData(questionForm);
@@ -479,31 +870,55 @@
                     changeLanguage(currentLang); 
                     window.scrollTo(0,0); 
                 } else {
-                    // Handle server errors or Formspree errors
-                    // You might want to parse response.json() if Formspree returns error details
-                    alert('Er is een fout opgetreden bij het verzenden van het formulier. Probeer het later opnieuw.');
+                    const errorData = await response.json().catch(() => ({})); 
+                    console.error("Formspree error:", errorData);
+                    let errorMessage = getTranslation(currentLang, 'alertError'); 
+                    
+                    if(errorData && errorData.errors && errorData.errors.length > 0 && errorData.errors[0].message){
+                        errorMessage = errorData.errors.map(err => err.message).join("\n");
+                    } else {
+                        errorMessage = getTranslation(currentLang, 'submitErrorFallback', 'en'); 
+                    }
+                    customAlert(errorMessage, getTranslation(currentLang, 'alertErrorTitle'));
                 }
             } catch (error) {
-                // Handle network errors
                 console.error('Form submission error:', error);
-                alert('Er is een netwerkfout opgetreden. Controleer uw internetverbinding en probeer het opnieuw.');
+                customAlert(getTranslation(currentLang, 'networkErrorFallback', 'en'), getTranslation(currentLang, 'alertErrorTitle'));
             } finally {
                 submitButton.disabled = false;
                 submitSpinner.style.display = 'none';
-                submitButtonText.textContent = t.submitButtonText; // Reset button text
+                submitButtonText.textContent = getTranslation(currentLang, 'submitButtonText'); 
                 submitButtonArrow.style.display = 'inline-block';
             }
         });
+        
+        ['nl', 'en', 'ar', 'ti', 'tr', 'fa', 'so', 'ku', 'ru', 'uk'].forEach(lang => {
+            if (!translations[lang]) translations[lang] = {}; 
+            if (typeof translations[lang].submitErrorFallback === 'undefined') {
+                translations[lang].submitErrorFallback = (translations.en && translations.en.submitErrorFallback) || "An error occurred during submission. Please try again.";
+            }
+            if (typeof translations[lang].networkErrorFallback === 'undefined') {
+                translations[lang].networkErrorFallback = (translations.en && translations.en.networkErrorFallback) || "A network error occurred. Please check your connection and try again.";
+            }
+        });
+
 
         document.getElementById('new-question-button').addEventListener('click', function() {
             confirmationSection.style.display = 'none';
             formSection.style.display = 'block';
             questionForm.reset();
             const currentLang = document.documentElement.lang || 'nl';
+            langButtons.forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.getAttribute('data-lang') === currentLang) {
+                    btn.classList.add('selected');
+                }
+            });
             changeLanguage(currentLang); 
-            window.scrollTo(0,0);
-        });
+            window.scrollTo(0,0);© 2025 Vluchtelingenwerk Nederland. Alle rechten voorbehouden.
 
+
+        });
 
         const privacyModal = document.getElementById('privacyModal');
         function showPrivacyPolicy(event) {
@@ -513,13 +928,37 @@
         document.getElementById('closePrivacyModal').addEventListener('click', function() {
             privacyModal.style.display = 'none';
         });
+        document.getElementById('privacy-info').addEventListener('click', function(event) {
+            if (event.target.id === 'privacy-link-text' || event.target.closest('#privacy-link-text')) {
+                 showPrivacyPolicy(event);
+            }
+        });
+
         window.addEventListener('click', function(event) {
             if (event.target === privacyModal) {
                 privacyModal.style.display = 'none';
             }
+            if (event.target === alertModal) { 
+                alertModal.style.display = 'none';
+            }
         });
-
-        changeLanguage('nl');
+        
+        let userLang = navigator.language || navigator.userLanguage;
+        let initialLang = 'nl'; 
+        if (userLang) {
+            userLang = userLang.split('-')[0]; 
+            if (translations[userLang]) {
+                initialLang = userLang;
+            }
+        }
+        
+        langButtons.forEach(btn => {
+            btn.classList.remove('selected');
+            if (btn.getAttribute('data-lang') === initialLang) {
+                btn.classList.add('selected');
+            }
+        });
+        changeLanguage(initialLang);
 
     </script>
 
